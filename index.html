@@ -5,89 +5,394 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>NTK Services</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="icon" href="ntklogo.png">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Tailwind CSS v4 -->
+    <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
+
+    <!-- Supabase -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* Hide scrollbar for a cleaner look in the nav if it wraps */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+    </style>
 </head>
 
-<body class="bg-yellow-50 text-gray-800">
+<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col">
 
-    <!-- NAV -->
-    <nav class="bg-white shadow p-4 flex justify-between">
-        <h1 class="text-xl font-bold text-blue-600">NTK Services</h1>
-        <div class="space-x-4">
-            <button onclick="showPage('home')">Home</button>
-            <button onclick="showPage('shop')">Products & Services</button>
-            <button onclick="showPage('admin')">Admin</button>
-            <button onclick="showPage('auth')">Account</button>
+    <!-- NAVIGATION -->
+    <nav class="sticky top-0 z-50 bg-white/80 backdrop-blur-lg border-b border-slate-200 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col sm:flex-row justify-between items-center py-4 gap-4">
+                <!-- Logo -->
+                <div class="flex items-center gap-2 cursor-pointer" onclick="showPage('home')">
+                    <div class="bg-blue-600 text-white p-2 rounded-xl">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect width="20" height="14" x="2" y="3" rx="2" />
+                            <line x1="8" x2="16" y1="21" y2="21" />
+                            <line x1="12" x2="12" y1="17" y2="21" />
+                        </svg>
+                    </div>
+                    <h1 class="text-xl font-extrabold tracking-tight text-slate-900">NTK<span
+                            class="text-blue-600">Services</span></h1>
+                </div>
+
+                <!-- Nav Links -->
+                <div
+                    class="flex flex-wrap justify-center gap-1 sm:gap-2 bg-slate-100/50 p-1 rounded-2xl border border-slate-200/60">
+                    <button onclick="showPage('home')"
+                        class="nav-btn px-4 py-2 rounded-xl text-sm font-medium text-slate-600 hover:text-slate-900 hover:bg-white hover:shadow-sm transition-all flex items-center gap-2"
+                        data-target="home">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+                            <polyline points="9 22 9 12 15 12 15 22" />
+                        </svg>
+                        <span class="hidden sm:inline">Home</span>
+                    </button>
+                    <button onclick="showPage('shop')"
+                        class="nav-btn px-4 py-2 rounded-xl text-sm font-medium text-slate-600 hover:text-slate-900 hover:bg-white hover:shadow-sm transition-all flex items-center gap-2"
+                        data-target="shop">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z" />
+                            <path d="M3 6h18" />
+                            <path d="M16 10a4 4 0 0 1-8 0" />
+                        </svg>
+                        <span class="hidden sm:inline">Shop</span>
+                    </button>
+                    <button onclick="showPage('admin')"
+                        class="nav-btn px-4 py-2 rounded-xl text-sm font-medium text-slate-600 hover:text-slate-900 hover:bg-white hover:shadow-sm transition-all flex items-center gap-2"
+                        data-target="admin">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10" />
+                            <path d="m9 12 2 2 4-4" />
+                        </svg>
+                        <span class="hidden sm:inline">Admin</span>
+                    </button>
+                    <button onclick="showPage('auth')"
+                        class="nav-btn px-4 py-2 rounded-xl text-sm font-medium text-slate-600 hover:text-slate-900 hover:bg-white hover:shadow-sm transition-all flex items-center gap-2"
+                        data-target="auth">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
+                            <circle cx="12" cy="7" r="4" />
+                        </svg>
+                        <span class="hidden sm:inline">Account</span>
+                    </button>
+                </div>
+            </div>
         </div>
     </nav>
 
-    <!-- HOME -->
-    <section id="home" class="p-6">
-        <h2 class="text-2xl font-bold text-blue-600">Welcome to NTK Services</h2>
-        <p class="mt-2">TV mounting, moving, storage & electronics services.</p>
-    </section>
+    <!-- MAIN CONTENT AREA -->
+    <main class="flex-grow w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
 
-    <!-- SHOP -->
-    <section id="shop" class="p-6 hidden">
-        <h2 class="text-2xl font-bold text-blue-600 mb-4">Products</h2>
-        <div id="productList" class="grid md:grid-cols-3 gap-4"></div>
+        <!-- HOME SECTION -->
+        <section id="home" class="page-section flex flex-col items-center justify-center text-center py-12 sm:py-24">
+            <div
+                class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-50 text-blue-600 text-sm font-semibold mb-6 border border-blue-100">
+                <span class="relative flex h-2 w-2">
+                    <span
+                        class="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
+                    <span class="relative inline-flex rounded-full h-2 w-2 bg-blue-500"></span>
+                </span>
+                Available for new projects
+            </div>
+            <h2 class="text-4xl sm:text-6xl font-extrabold text-slate-900 tracking-tight leading-tight max-w-3xl">
+                Expert Installation & <br class="hidden sm:block" /> Moving Services
+            </h2>
+            <p class="mt-6 text-lg sm:text-xl text-slate-500 max-w-2xl leading-relaxed">
+                Professional TV mounting, secure moving, storage solutions, and electronics setup. Fast, reliable, and
+                perfectly executed.
+            </p>
+            <div class="mt-10 flex flex-col sm:flex-row gap-4">
+                <button onclick="showPage('shop')"
+                    class="px-8 py-4 bg-blue-600 hover:bg-blue-700 text-white rounded-2xl font-semibold shadow-lg shadow-blue-600/20 transition-all hover:-translate-y-0.5 focus:ring-4 focus:ring-blue-100 flex items-center justify-center gap-2">
+                    View Services
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M5 12h14" />
+                        <path d="m12 5 7 7-7 7" />
+                    </svg>
+                </button>
+                <button onclick="showPage('auth')"
+                    class="px-8 py-4 bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 rounded-2xl font-semibold transition-all hover:-translate-y-0.5 focus:ring-4 focus:ring-slate-100">
+                    Create Account
+                </button>
+            </div>
+        </section>
 
-        <h2 class="text-2xl font-bold text-blue-600 mt-8 mb-4">Services</h2>
-        <div id="serviceList" class="grid md:grid-cols-3 gap-4"></div>
-    </section>
-
-    <!-- ADMIN -->
-    <section id="admin" class="p-6 hidden">
-        <div id="adminLogin">
-            <h2 class="text-2xl font-bold text-blue-600">Admin Login</h2>
-            <input id="adminPass" type="password" placeholder="Password" class="border p-2 mt-2" />
-            <button onclick="adminLogin()" class="bg-blue-600 text-white px-4 py-2 ml-2">Enter</button>
-        </div>
-
-        <div id="adminPanel" class="hidden">
-            <h2 class="text-2xl font-bold text-blue-600 mb-4">Admin Panel</h2>
-
-            <div class="mb-6">
-                <h3 class="font-bold">Add Product</h3>
-                <input id="pname" placeholder="Name" class="border p-2" />
-                <input id="pprice" placeholder="Price (KSh)" class="border p-2" />
-                <input id="pdesc" placeholder="Description" class="border p-2" />
-                <button onclick="addProduct()" class="bg-yellow-500 px-4 py-2">Add</button>
+        <!-- SHOP SECTION -->
+        <section id="shop" class="page-section hidden">
+            <div class="mb-12">
+                <div class="flex items-center gap-3 mb-6">
+                    <div class="p-2 bg-amber-100 text-amber-600 rounded-lg">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="m7.5 4.27 9 5.15" />
+                            <path
+                                d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z" />
+                            <path d="m3.3 7 8.7 5 8.7-5" />
+                            <path d="M12 22V12" />
+                        </svg>
+                    </div>
+                    <h2 class="text-3xl font-bold text-slate-900 tracking-tight">Products</h2>
+                </div>
+                <div id="productList" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- Products injected via JS -->
+                </div>
             </div>
 
-            <div class="mb-6">
-                <h3 class="font-bold">Add Service</h3>
-                <input id="sname" placeholder="Name" class="border p-2" />
-                <input id="sprice" placeholder="Price (KSh)" class="border p-2" />
-                <input id="sdesc" placeholder="Description" class="border p-2" />
-                <button onclick="addService()" class="bg-blue-500 text-white px-4 py-2">Add</button>
+            <div class="mt-16">
+                <div class="flex items-center gap-3 mb-6">
+                    <div class="p-2 bg-blue-100 text-blue-600 rounded-lg">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path
+                                d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z" />
+                        </svg>
+                    </div>
+                    <h2 class="text-3xl font-bold text-slate-900 tracking-tight">Services</h2>
+                </div>
+                <div id="serviceList" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- Services injected via JS -->
+                </div>
+            </div>
+        </section>
+
+        <!-- ADMIN SECTION -->
+        <section id="admin" class="page-section hidden">
+            <!-- Admin Login -->
+            <div id="adminLogin" class="max-w-md mx-auto mt-10">
+                <div class="bg-white p-8 rounded-3xl shadow-sm border border-slate-200 text-center">
+                    <div
+                        class="w-16 h-16 bg-slate-100 text-slate-600 rounded-2xl flex items-center justify-center mx-auto mb-6">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect width="18" height="11" x="3" y="11" rx="2" ry="2" />
+                            <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+                        </svg>
+                    </div>
+                    <h2 class="text-2xl font-bold text-slate-900 mb-2">Admin Access</h2>
+                    <p class="text-slate-500 mb-6 text-sm">Enter the master password to continue.</p>
+                    <div class="space-y-4">
+                        <input id="adminPass" type="password" placeholder="Password"
+                            class="w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all" />
+                        <button onclick="adminLogin()"
+                            class="w-full bg-slate-900 hover:bg-slate-800 text-white font-semibold py-3 rounded-xl transition-colors">
+                            Enter Dashboard
+                        </button>
+                    </div>
+                </div>
             </div>
 
-            <div>
-                <h3 class="font-bold">Orders</h3>
-                <div id="orders"></div>
+            <!-- Admin Panel -->
+            <div id="adminPanel" class="hidden">
+                <div class="flex items-center justify-between mb-8">
+                    <div>
+                        <h2 class="text-3xl font-bold text-slate-900 tracking-tight">Dashboard</h2>
+                        <p class="text-slate-500 mt-1">Manage your inventory and track orders.</p>
+                    </div>
+                </div>
+
+                <div class="grid lg:grid-cols-12 gap-8">
+                    <!-- Left Column: Forms -->
+                    <div class="lg:col-span-4 space-y-6">
+                        <!-- Add Product -->
+                        <div class="bg-white p-6 rounded-3xl shadow-sm border border-slate-200">
+                            <div class="flex items-center gap-2 mb-4">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" class="text-amber-500"
+                                    viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                    stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="m7.5 4.27 9 5.15" />
+                                    <path
+                                        d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z" />
+                                    <path d="m3.3 7 8.7 5 8.7-5" />
+                                    <path d="M12 22V12" />
+                                </svg>
+                                <h3 class="font-bold text-lg text-slate-900">Add Product</h3>
+                            </div>
+                            <div class="space-y-3">
+                                <input id="pname" placeholder="Product Name"
+                                    class="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-sm focus:ring-2 focus:ring-blue-500 outline-none" />
+                                <input id="pprice" type="number" placeholder="Price (KSh)"
+                                    class="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-sm focus:ring-2 focus:ring-blue-500 outline-none" />
+                                <textarea id="pdesc" placeholder="Description" rows="2"
+                                    class="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-sm focus:ring-2 focus:ring-blue-500 outline-none resize-none"></textarea>
+                                <button onclick="addProduct()"
+                                    class="w-full bg-amber-500 hover:bg-amber-600 text-white font-medium py-2.5 rounded-xl transition-colors flex justify-center items-center gap-2">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+                                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                        stroke-linejoin="round">
+                                        <path d="M5 12h14" />
+                                        <path d="M12 5v14" />
+                                    </svg>
+                                    Add Product
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Add Service -->
+                        <div class="bg-white p-6 rounded-3xl shadow-sm border border-slate-200">
+                            <div class="flex items-center gap-2 mb-4">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" class="text-blue-500"
+                                    viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                    stroke-linecap="round" stroke-linejoin="round">
+                                    <path
+                                        d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z" />
+                                </svg>
+                                <h3 class="font-bold text-lg text-slate-900">Add Service</h3>
+                            </div>
+                            <div class="space-y-3">
+                                <input id="sname" placeholder="Service Name"
+                                    class="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-sm focus:ring-2 focus:ring-blue-500 outline-none" />
+                                <input id="sprice" type="number" placeholder="Price (KSh)"
+                                    class="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-sm focus:ring-2 focus:ring-blue-500 outline-none" />
+                                <textarea id="sdesc" placeholder="Description" rows="2"
+                                    class="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-sm focus:ring-2 focus:ring-blue-500 outline-none resize-none"></textarea>
+                                <button onclick="addService()"
+                                    class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2.5 rounded-xl transition-colors flex justify-center items-center gap-2">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+                                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                        stroke-linejoin="round">
+                                        <path d="M5 12h14" />
+                                        <path d="M12 5v14" />
+                                    </svg>
+                                    Add Service
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right Column: Orders -->
+                    <div class="lg:col-span-8">
+                        <div class="bg-white p-6 rounded-3xl shadow-sm border border-slate-200 h-full">
+                            <div class="flex items-center gap-2 mb-6 pb-4 border-b border-slate-100">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" class="text-slate-400"
+                                    viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                    stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                                    <polyline points="14 2 14 8 20 8" />
+                                    <line x1="16" x2="8" y1="13" y2="13" />
+                                    <line x1="16" x2="8" y1="17" y2="17" />
+                                    <polyline points="10 9 9 9 8 9" />
+                                </svg>
+                                <h3 class="font-bold text-xl text-slate-900">Recent Orders</h3>
+                            </div>
+                            <div id="orders" class="space-y-4 font-mono text-sm">
+                                <!-- Orders injected via JS -->
+                                <p class="text-slate-400 text-center py-8 font-sans">Loading orders...</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <!-- AUTH -->
-    <section id="auth" class="p-6 hidden">
-        <h2 class="text-2xl font-bold text-blue-600">Account</h2>
-        <input id="email" placeholder="Email" class="border p-2" />
-        <input id="password" type="password" placeholder="Password" class="border p-2" />
-        <button onclick="signUp()" class="bg-blue-600 text-white px-4 py-2">Sign Up</button>
-        <button onclick="signIn()" class="bg-yellow-500 px-4 py-2">Login</button>
-        <p id="authMsg"></p>
-    </section>
+        <!-- AUTH SECTION -->
+        <section id="auth" class="page-section hidden">
+            <div class="max-w-md mx-auto mt-10">
+                <div class="bg-white p-8 rounded-3xl shadow-sm border border-slate-200">
+                    <div class="text-center mb-8">
+                        <div
+                            class="w-16 h-16 bg-blue-50 text-blue-600 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round">
+                                <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
+                                <circle cx="12" cy="7" r="4" />
+                            </svg>
+                        </div>
+                        <h2 class="text-2xl font-bold text-slate-900">Your Account</h2>
+                        <p class="text-slate-500 mt-1 text-sm">Sign in or create a new account to place orders.</p>
+                    </div>
 
-    <!-- SITE SCRIPT -->
+                    <div class="space-y-4">
+                        <div>
+                            <label
+                                class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">Email
+                                Address</label>
+                            <input id="email" type="email" placeholder="you@example.com"
+                                class="w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-blue-500 outline-none transition-all" />
+                        </div>
+                        <div>
+                            <label
+                                class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">Password</label>
+                            <input id="password" type="password" placeholder="••••••••"
+                                class="w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-blue-500 outline-none transition-all" />
+                        </div>
+
+                        <div class="pt-4 grid grid-cols-2 gap-3">
+                            <button onclick="signIn()"
+                                class="w-full bg-slate-900 hover:bg-slate-800 text-white font-medium py-3 rounded-xl transition-colors">
+                                Login
+                            </button>
+                            <button onclick="signUp()"
+                                class="w-full bg-white hover:bg-slate-50 text-slate-900 border border-slate-200 font-medium py-3 rounded-xl transition-colors">
+                                Sign Up
+                            </button>
+                        </div>
+
+                        <div id="authMsgContainer"
+                            class="hidden mt-4 p-3 rounded-xl bg-slate-100 text-center text-sm font-medium">
+                            <p id="authMsg" class="text-slate-700"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- UI & ROUTING SCRIPT -->
     <script>
         function showPage(id) {
-            document.querySelectorAll('section').forEach(s => s.classList.add('hidden'));
-            document.getElementById(id).classList.remove('hidden');
+            // Hide all sections
+            document.querySelectorAll('.page-section').forEach(s => {
+                s.classList.add('hidden');
+                s.classList.remove('animate-fade-in');
+            });
+
+            // Show target section with a small fade effect (using tailwind utility if defined, or just block)
+            const target = document.getElementById(id);
+            target.classList.remove('hidden');
+
+            // Update Nav Active States
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                if (btn.dataset.target === id) {
+                    btn.classList.add('bg-white', 'shadow-sm', 'text-slate-900');
+                    btn.classList.remove('text-slate-600');
+                } else {
+                    btn.classList.remove('bg-white', 'shadow-sm', 'text-slate-900');
+                    btn.classList.add('text-slate-600');
+                }
+            });
         }
 
         function adminLogin() {
@@ -96,89 +401,195 @@
                 document.getElementById('adminLogin').classList.add('hidden');
                 document.getElementById('adminPanel').classList.remove('hidden');
                 loadOrders();
-            } else alert('Wrong password');
+            } else {
+                alert('Incorrect admin password.');
+            }
         }
+
+        // Initialize active nav state
+        showPage('home');
     </script>
 
     <!-- SUPABASE SCRIPT -->
     <script>
-        const emailEl = document.getElementById('').value
+        // Note: Replace these with actual keys for production.
         const SUPABASE_URL = "https://phypulwiydnjrjebfjpm.supabase.co";
         const SUPABASE_ANON = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBoeXB1bHdpeWRuanJqZWJmanBtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzExNTEwOTEsImV4cCI6MjA4NjcyNzA5MX0.KByt2pb-S0J3myYtLWN6q2JH24nJxA3af3GngVQXBcs";
         const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
 
+        function showMessage(msg, isError = false) {
+            const container = document.getElementById('authMsgContainer');
+            const text = document.getElementById('authMsg');
+            container.classList.remove('hidden', 'bg-red-50', 'bg-green-50');
+            text.classList.remove('text-red-600', 'text-green-600');
+
+            if (isError) {
+                container.classList.add('bg-red-50');
+                text.classList.add('text-red-600');
+            } else {
+                container.classList.add('bg-green-50');
+                text.classList.add('text-green-600');
+            }
+            text.innerText = msg;
+        }
+
         async function signUp() {
-            const email = emailEl.value;
-            const password = passwordEl.value;
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+
+            if (!email || !password) return showMessage("Email and password required.", true);
+
             const { data, error } = await sb.auth.signUp({ email, password });
-            if (error) return authMsg.innerText = error.message;
+            if (error) {
+                showMessage(error.message, true);
+                return;
+            }
+
             if (data.user) {
+                // Handle insert error silently or log it
                 await sb.from('profiles').insert({
                     id: data.user.id,
                     email: data.user.email
                 });
             }
-            authMsg.innerText = "Account created";
+
+            showMessage("Account created successfully!");
         }
 
         async function signIn() {
-            const email = emailEl.value;
-            const password = passwordEl.value;
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+
+            if (!email || !password) return showMessage("Email and password required.", true);
+
             const { error } = await sb.auth.signInWithPassword({ email, password });
-            authMsg.innerText = error ? error.message : "Logged in";
+            if (error) {
+                showMessage(error.message, true);
+            } else {
+                showMessage("Logged in successfully!");
+                setTimeout(() => showPage('shop'), 1000);
+            }
         }
 
         async function addProduct() {
-            const name = pname.value;
-            const price = pprice.value;
-            const description = pdesc.value;
+            const name = document.getElementById('pname').value;
+            const price = document.getElementById('pprice').value;
+            const description = document.getElementById('pdesc').value;
+
+            if (!name || !price) return alert("Name and price required.");
+
             await sb.from('products').insert({ name, price, description });
+
+            document.getElementById('pname').value = '';
+            document.getElementById('pprice').value = '';
+            document.getElementById('pdesc').value = '';
+
             loadProducts();
+            alert("Product added!");
         }
 
         async function addService() {
-            const name = sname.value;
-            const price = sprice.value;
-            const description = sdesc.value;
+            const name = document.getElementById('sname').value;
+            const price = document.getElementById('sprice').value;
+            const description = document.getElementById('sdesc').value;
+
+            if (!name || !price) return alert("Name and price required.");
+
             await sb.from('services').insert({ name, price, description });
+
+            document.getElementById('sname').value = '';
+            document.getElementById('sprice').value = '';
+            document.getElementById('sdesc').value = '';
+
             loadServices();
+            alert("Service added!");
         }
 
         async function loadProducts() {
-            const { data } = await sb.from('products').select('*');
+            const { data, error } = await sb.from('products').select('*');
+            const productList = document.getElementById('productList');
+
+            if (error || !data) {
+                productList.innerHTML = `<p class="text-slate-500 col-span-full">Unable to load products. Check database connection.</p>`;
+                return;
+            }
+
+            if (data.length === 0) {
+                productList.innerHTML = `<p class="text-slate-500 col-span-full">No products available yet.</p>`;
+                return;
+            }
+
             productList.innerHTML = '';
             data.forEach(p => {
                 const div = document.createElement('div');
-                div.className = 'bg-white p-4 shadow rounded';
-                div.innerHTML = `<h3 class='font-bold'>${p.name}</h3>
-          <p>${p.description || ''}</p>
-          <p class='font-bold mt-2'>KSh ${p.price}</p>
-          <button class='bg-blue-600 text-white px-2 py-1 mt-2' onclick="orderProduct(${p.id},${p.price})">Order</button>`;
+                div.className = 'bg-white p-6 rounded-3xl border border-slate-100 shadow-sm hover:shadow-md transition-shadow flex flex-col h-full';
+                div.innerHTML = `
+          <div class="flex-1">
+            <div class="w-12 h-12 bg-amber-50 text-amber-500 rounded-2xl flex items-center justify-center mb-4">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m7.5 4.27 9 5.15"/><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/><path d="m3.3 7 8.7 5 8.7-5"/><path d="M12 22V12"/></svg>
+            </div>
+            <h3 class='text-lg font-bold text-slate-900'>${p.name}</h3>
+            <p class='text-slate-500 mt-2 text-sm leading-relaxed'>${p.description || 'Premium quality product.'}</p>
+          </div>
+          <div class="mt-6 flex items-center justify-between pt-4 border-t border-slate-50">
+            <span class='text-xl font-extrabold text-slate-900'>KSh ${p.price}</span>
+            <button class='bg-slate-900 hover:bg-slate-800 text-white px-4 py-2 rounded-xl font-medium text-sm transition-colors' onclick="orderProduct(${p.id},${p.price})">Order Now</button>
+          </div>`;
                 productList.appendChild(div);
             });
         }
 
         async function loadServices() {
-            const { data } = await sb.from('services').select('*');
+            const { data, error } = await sb.from('services').select('*');
+            const serviceList = document.getElementById('serviceList');
+
+            if (error || !data) {
+                serviceList.innerHTML = `<p class="text-slate-500 col-span-full">Unable to load services. Check database connection.</p>`;
+                return;
+            }
+
+            if (data.length === 0) {
+                serviceList.innerHTML = `<p class="text-slate-500 col-span-full">No services available yet.</p>`;
+                return;
+            }
+
             serviceList.innerHTML = '';
             data.forEach(s => {
                 const div = document.createElement('div');
-                div.className = 'bg-white p-4 shadow rounded';
-                div.innerHTML = `<h3 class='font-bold'>${s.name}</h3>
-          <p>${s.description || ''}</p>
-          <p class='font-bold mt-2'>KSh ${s.price}</p>
-          <button class='bg-yellow-500 px-2 py-1 mt-2' onclick="orderService(${s.id},${s.price})">Order</button>`;
+                div.className = 'bg-white p-6 rounded-3xl border border-slate-100 shadow-sm hover:shadow-md transition-shadow flex flex-col h-full';
+                div.innerHTML = `
+          <div class="flex-1">
+            <div class="w-12 h-12 bg-blue-50 text-blue-600 rounded-2xl flex items-center justify-center mb-4">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+            </div>
+            <h3 class='text-lg font-bold text-slate-900'>${s.name}</h3>
+            <p class='text-slate-500 mt-2 text-sm leading-relaxed'>${s.description || 'Professional service by experts.'}</p>
+          </div>
+          <div class="mt-6 flex items-center justify-between pt-4 border-t border-slate-50">
+            <span class='text-xl font-extrabold text-slate-900'>KSh ${s.price}</span>
+            <button class='bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-xl font-medium text-sm transition-colors' onclick="orderService(${s.id},${s.price})">Book Service</button>
+          </div>`;
                 serviceList.appendChild(div);
             });
         }
 
         async function createOrder() {
             const { data: { user } } = await sb.auth.getUser();
-            if (!user) return alert('Login first');
-            const { data } = await sb.from('orders')
+            if (!user) {
+                alert('Please login to place an order.');
+                showPage('auth');
+                return null;
+            }
+            const { data, error } = await sb.from('orders')
                 .insert({ user_id: user.id })
                 .select()
                 .single();
+
+            if (error) {
+                console.error(error);
+                alert('Failed to create order.');
+                return null;
+            }
             return data.id;
         }
 
@@ -190,7 +601,7 @@
                 product_id: pid,
                 price: price
             });
-            alert('Product ordered');
+            alert('Product added to your orders!');
         }
 
         async function orderService(sid, price) {
@@ -201,30 +612,54 @@
                 service_id: sid,
                 price: price
             });
-            alert('Service ordered');
+            alert('Service booked successfully!');
         }
 
         async function loadOrders() {
-            const { data } = await sb
+            const ordersDiv = document.getElementById('orders');
+            const { data, error } = await sb
                 .from('orders')
                 .select(`id, user_id, order_items(price, products(name), services(name))`)
                 .order('id', { ascending: false });
 
-            orders.innerHTML = '';
+            if (error || !data) {
+                ordersDiv.innerHTML = `<p class="text-red-500">Failed to load orders.</p>`;
+                return;
+            }
+
+            if (data.length === 0) {
+                ordersDiv.innerHTML = `<p class="text-slate-500">No orders found.</p>`;
+                return;
+            }
+
+            ordersDiv.innerHTML = '';
             data.forEach(o => {
-                let items = '';
+                let itemsHtml = '';
+                let total = 0;
                 o.order_items.forEach(i => {
-                    const name = i.products?.name || i.services?.name;
-                    items += `${name} — KSh ${i.price}<br>`;
+                    const name = i.products?.name || i.services?.name || 'Unknown Item';
+                    itemsHtml += `<div class="flex justify-between py-1 border-b border-slate-100/50 last:border-0"><span class="text-slate-600">${name}</span><span class="font-medium">KSh ${i.price}</span></div>`;
+                    total += Number(i.price);
                 });
-                orders.innerHTML += `<div class='border p-2 mb-2'>
-          <b>Order #${o.id}</b><br>
-          ${items}
-          User: ${o.user_id}
-        </div>`;
+
+                ordersDiv.innerHTML += `
+          <div class='bg-slate-50 p-4 rounded-2xl border border-slate-200'>
+            <div class="flex justify-between items-center mb-3 pb-2 border-b border-slate-200">
+              <span class="font-bold text-slate-900">Order #${o.id}</span>
+              <span class="text-xs bg-slate-200 text-slate-600 px-2 py-1 rounded-md max-w-[120px] truncate" title="${o.user_id}">${o.user_id}</span>
+            </div>
+            <div class="mb-3 space-y-1">
+              ${itemsHtml}
+            </div>
+            <div class="flex justify-between items-center pt-2 border-t border-slate-200">
+              <span class="text-slate-500 uppercase text-xs font-bold tracking-wider">Total</span>
+              <span class="font-bold text-blue-600">KSh ${total}</span>
+            </div>
+          </div>`;
             });
         }
 
+        // Initial load
         loadProducts();
         loadServices();
     </script>
