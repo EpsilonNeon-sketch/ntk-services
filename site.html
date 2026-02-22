@@ -85,6 +85,16 @@
                         </svg>
                         <span class="hidden sm:inline">Shop</span>
                     </button>
+                    <button id="cartBtn" onclick="showCart()"
+                        class="nav-btn px-4 py-2 rounded-xl text-sm font-medium text-slate-600 hover:text-slate-900 hover:bg-white hover:shadow-sm transition-all flex items-center gap-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="9" cy="21" r="1" />
+                            <circle cx="20" cy="21" r="1" />
+                            <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" />
+                        </svg>
+                        <span class="hidden sm:inline">Cart (0)</span>
+                    </button>
                     <button onclick="showPage('admin')"
                         class="nav-btn px-4 py-2 rounded-xl text-sm font-medium text-slate-600 hover:text-slate-900 hover:bg-white hover:shadow-sm transition-all flex items-center gap-2"
                         data-target="admin">
@@ -366,8 +376,23 @@
                     </div>
                 </div>
             </div>
-        </section>
 
+        </section>
+        <dialog id="orderDialog" class="p-6 rounded-2xl border-none shadow-2xl backdrop:blur-sm w-90">
+            <div class="flex flex-col gap-4">
+                <h2 class="text-xl font-bold text-slate-900">Delivery Details</h2>
+                <input type="text" id="custName" placeholder="Full Name" class="p-3 border rounded-xl">
+                <input type="text" id="custLocation" placeholder="Location/Address" class="p-3 border rounded-xl">
+                <input type="tel" id="custPhone" placeholder="Phone Number" class="p-3 border rounded-xl">
+                <input type="email" id="custEmail" placeholder="Gmail Address" class="p-3 border rounded-xl">
+                <div class="flex gap-2 mt-2">
+                    <button onclick="document.getElementById('orderDialog').close()"
+                        class="flex-1 p-3 bg-slate-100 rounded-xl font-bold">Cancel</button>
+                    <button onclick="confirmOrder()"
+                        class="flex-1 p-3 bg-blue-600 text-white rounded-xl font-bold">Place Order</button>
+                </div>
+            </div>
+        </dialog>
     </main>
 
     <!-- UI & ROUTING SCRIPT -->
@@ -433,6 +458,40 @@
             text.innerText = msg;
         }
 
+        // Cart state
+        let cart = [];
+
+        function addToCart(id, name, price, type) {
+            cart.push({ id, name, price, type });
+            updateCartUI();
+            showMessage(`${name} added to cart!`);
+        }
+
+        function updateCartUI() {
+            const cartBtn = document.getElementById('cartBtn');
+            if (cartBtn) {
+                cartBtn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg> <span class="hidden sm:inline">Cart (${cart.length})</span>`;
+            }
+        }
+
+        function showCart() {
+            if (cart.length === 0) {
+                alert("Cart is empty! Add some items first.");
+                return;
+            }
+            let cartMsg = "Your Cart:\n\n";
+            let total = 0;
+            cart.forEach((item, index) => {
+                cartMsg += `${index + 1}. ${item.name} - KSh ${item.price}\n`;
+                total += item.price;
+            });
+            cartMsg += `\nTotal: KSh ${total}\n\nClick OK to checkout!`;
+
+            if (confirm(cartMsg)) {
+                placeOrder();
+            }
+        }
+
         async function signUp() {
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
@@ -440,20 +499,114 @@
             if (!email || !password) return showMessage("Email and password required.", true);
 
             const { data, error } = await sb.auth.signUp({ email, password });
-            if (error) {
-                showMessage(error.message, true);
-                return;
-            }
+            if (error) return showMessage(error.message, true);
 
             if (data.user) {
-                // Handle insert error silently or log it
-                await sb.from('profiles').insert({
+                // FORCE SYNC: Manually insert the email into profiles immediately
+                await sb.from('profiles').upsert({
                     id: data.user.id,
-                    email: data.user.email
+                    email: email, // This is the key part you were missing!
+                    full_name: email.split('@')[0]
                 });
             }
 
-            showMessage("Account created successfully!");
+            showMessage("Account created! Check email if confirmation is on.");
+        }
+
+        // Open the dialog instead of just ordering
+        // Replacement for your "Place Order" button logic
+        async function placeOrder() {
+            if (cart.length === 0) return showMessage("Cart is empty!", true);
+            document.getElementById('orderDialog').showModal();
+        }
+
+        async function confirmOrder() {
+            const user = (await sb.auth.getUser()).data.user;
+            if (!user) return showMessage("Please login first", true);
+
+            const name = document.getElementById('custName').value;
+            const loc = document.getElementById('custLocation').value;
+            const phone = document.getElementById('custPhone').value;
+            const email = document.getElementById('custEmail').value;
+
+            if (!name || !loc || !phone || !email) return alert("Fill all fields!");
+
+            // 1. Create Order with the new data
+            const { data: order, error: orderErr } = await sb.from('orders').insert({
+                user_id: user.id,
+                customer_name: name,
+                customer_location: loc,
+                customer_phone: phone,
+                customer_email: email,
+                status: 'pending'
+            }).select().single();
+
+            if (orderErr) return showMessage(orderErr.message, true);
+
+            // 2. Add items to order_items
+            const orderItems = cart.map(item => ({
+                order_id: order.id,
+                product_id: item.type === 'product' ? item.id : null,
+                service_id: item.type === 'service' ? item.id : null,
+                price: item.price
+            }));
+
+            const { error: itemsErr } = await sb.from('order_items').insert(orderItems);
+            if (itemsErr) return showMessage(itemsErr.message, true);
+
+            cart = [];
+            updateCartUI();
+            document.getElementById('orderDialog').close();
+            showMessage("Order placed successfully! Epsilon team is on it.");
+        }
+
+        async function loadOrders() {
+            const ordersDiv = document.getElementById('orders');
+
+            const { data: orders, error: orderError } = await sb
+                .from('orders')
+                .select(`*, order_items(price, products(name), services(name))`)
+                .order('id', { ascending: false });
+
+            if (orderError) {
+                ordersDiv.innerHTML = `<p class="text-red-500">Failed to load orders.</p>`;
+                return;
+            }
+
+            ordersDiv.innerHTML = '';
+            orders.forEach(o => {
+                let itemsHtml = '';
+                let total = 0;
+                o.order_items.forEach(i => {
+                    const itemName = i.products?.name || i.services?.name || 'Unknown Item';
+                    itemsHtml += `<div class="flex justify-between py-1 border-b border-slate-100/50 last:border-0"><span class="text-slate-600 text-sm">${itemName}</span><span class="font-medium text-sm">KSh ${i.price}</span></div>`;
+                    total += Number(i.price);
+                });
+
+                ordersDiv.innerHTML += `
+          <div class='bg-white p-5 rounded-2xl border border-slate-200 shadow-sm'>
+            <div class="flex justify-between items-start mb-4">
+                <div>
+                    <h3 class="font-extrabold text-slate-900">Order #${o.id}</h3>
+                    <p class="text-blue-600 font-bold text-sm">${o.customer_email}</p>
+                </div>
+                <span class="text-[10px] bg-green-100 text-green-700 px-2 py-1 rounded-full font-bold uppercase">${o.status}</span>
+            </div>
+            
+            <div class="bg-slate-50 p-3 rounded-xl mb-4 text-xs space-y-1 border border-slate-100">
+                <p>👤 <span class="font-semibold text-slate-700">${o.customer_name}</span></p>
+                <p>📍 <span class="font-semibold text-slate-700">${o.customer_location}</span></p>
+                <p>📞 <span class="font-semibold text-slate-700">${o.customer_phone}</span></p>
+            </div>
+
+            <div class="mb-4">${itemsHtml}</div>
+            
+            <div class="flex justify-between items-center pt-3 border-t-2 border-dashed border-slate-100">
+              <span class="text-slate-400 uppercase text-[10px] font-black tracking-widest">Total</span>
+              <span class="font-black text-lg text-slate-900">KSh ${total}</span>
+            </div>
+          </div>`;
+            });
         }
 
         async function signIn() {
@@ -533,7 +686,7 @@
           </div>
           <div class="mt-6 flex items-center justify-between pt-4 border-t border-slate-50">
             <span class='text-xl font-extrabold text-slate-900'>KSh ${p.price}</span>
-            <button class='bg-slate-900 hover:bg-slate-800 text-white px-4 py-2 rounded-xl font-medium text-sm transition-colors' onclick="orderProduct(${p.id},${p.price})">Order Now</button>
+            <button class='bg-slate-900 hover:bg-slate-800 text-white px-4 py-2 rounded-xl font-medium text-sm transition-colors' onclick="addToCart(${p.id},'${p.name.replace(/'/g, "\\'")}',${p.price},'product')">Add to Cart</button>
           </div>`;
                 productList.appendChild(div);
             });
@@ -567,7 +720,7 @@
           </div>
           <div class="mt-6 flex items-center justify-between pt-4 border-t border-slate-50">
             <span class='text-xl font-extrabold text-slate-900'>KSh ${s.price}</span>
-            <button class='bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-xl font-medium text-sm transition-colors' onclick="orderService(${s.id},${s.price})">Book Service</button>
+            <button class='bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-xl font-medium text-sm transition-colors' onclick="addToCart(${s.id},'${s.name.replace(/'/g, "\\'")}',${s.price},'service')">Add to Cart</button>
           </div>`;
                 serviceList.appendChild(div);
             });
@@ -591,72 +744,6 @@
                 return null;
             }
             return data.id;
-        }
-
-        async function orderProduct(pid, price) {
-            const orderId = await createOrder();
-            if (!orderId) return;
-            await sb.from('order_items').insert({
-                order_id: orderId,
-                product_id: pid,
-                price: price
-            });
-            alert('Product added to your orders!');
-        }
-
-        async function orderService(sid, price) {
-            const orderId = await createOrder();
-            if (!orderId) return;
-            await sb.from('order_items').insert({
-                order_id: orderId,
-                service_id: sid,
-                price: price
-            });
-            alert('Service booked successfully!');
-        }
-
-        async function loadOrders() {
-            const ordersDiv = document.getElementById('orders');
-            const { data, error } = await sb
-                .from('orders')
-                .select(`id, user_id, order_items(price, products(name), services(name))`)
-                .order('id', { ascending: false });
-
-            if (error || !data) {
-                ordersDiv.innerHTML = `<p class="text-red-500">Failed to load orders.</p>`;
-                return;
-            }
-
-            if (data.length === 0) {
-                ordersDiv.innerHTML = `<p class="text-slate-500">No orders found.</p>`;
-                return;
-            }
-
-            ordersDiv.innerHTML = '';
-            data.forEach(o => {
-                let itemsHtml = '';
-                let total = 0;
-                o.order_items.forEach(i => {
-                    const name = i.products?.name || i.services?.name || 'Unknown Item';
-                    itemsHtml += `<div class="flex justify-between py-1 border-b border-slate-100/50 last:border-0"><span class="text-slate-600">${name}</span><span class="font-medium">KSh ${i.price}</span></div>`;
-                    total += Number(i.price);
-                });
-
-                ordersDiv.innerHTML += `
-          <div class='bg-slate-50 p-4 rounded-2xl border border-slate-200'>
-            <div class="flex justify-between items-center mb-3 pb-2 border-b border-slate-200">
-              <span class="font-bold text-slate-900">Order #${o.id}</span>
-              <span class="text-xs bg-slate-200 text-slate-600 px-2 py-1 rounded-md max-w-[120px] truncate" title="${o.user_id}">${o.user_id}</span>
-            </div>
-            <div class="mb-3 space-y-1">
-              ${itemsHtml}
-            </div>
-            <div class="flex justify-between items-center pt-2 border-t border-slate-200">
-              <span class="text-slate-500 uppercase text-xs font-bold tracking-wider">Total</span>
-              <span class="font-bold text-blue-600">KSh ${total}</span>
-            </div>
-          </div>`;
-            });
         }
 
         // Initial load
