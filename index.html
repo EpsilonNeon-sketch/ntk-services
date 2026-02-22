@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>NTK Services</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="icon" href="ntklogo.png">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+
+<body class="bg-yellow-50 text-gray-800">
+
+    <!-- NAV -->
+    <nav class="bg-white shadow p-4 flex justify-between">
+        <h1 class="text-xl font-bold text-blue-600">NTK Services</h1>
+        <div class="space-x-4">
+            <button onclick="showPage('home')">Home</button>
+            <button onclick="showPage('shop')">Products & Services</button>
+            <button onclick="showPage('admin')">Admin</button>
+            <button onclick="showPage('auth')">Account</button>
+        </div>
+    </nav>
+
+    <!-- HOME -->
+    <section id="home" class="p-6">
+        <h2 class="text-2xl font-bold text-blue-600">Welcome to NTK Services</h2>
+        <p class="mt-2">TV mounting, moving, storage & electronics services.</p>
+    </section>
+
+    <!-- SHOP -->
+    <section id="shop" class="p-6 hidden">
+        <h2 class="text-2xl font-bold text-blue-600 mb-4">Products</h2>
+        <div id="productList" class="grid md:grid-cols-3 gap-4"></div>
+
+        <h2 class="text-2xl font-bold text-blue-600 mt-8 mb-4">Services</h2>
+        <div id="serviceList" class="grid md:grid-cols-3 gap-4"></div>
+    </section>
+
+    <!-- ADMIN -->
+    <section id="admin" class="p-6 hidden">
+        <div id="adminLogin">
+            <h2 class="text-2xl font-bold text-blue-600">Admin Login</h2>
+            <input id="adminPass" type="password" placeholder="Password" class="border p-2 mt-2" />
+            <button onclick="adminLogin()" class="bg-blue-600 text-white px-4 py-2 ml-2">Enter</button>
+        </div>
+
+        <div id="adminPanel" class="hidden">
+            <h2 class="text-2xl font-bold text-blue-600 mb-4">Admin Panel</h2>
+
+            <div class="mb-6">
+                <h3 class="font-bold">Add Product</h3>
+                <input id="pname" placeholder="Name" class="border p-2" />
+                <input id="pprice" placeholder="Price (KSh)" class="border p-2" />
+                <input id="pdesc" placeholder="Description" class="border p-2" />
+                <button onclick="addProduct()" class="bg-yellow-500 px-4 py-2">Add</button>
+            </div>
+
+            <div class="mb-6">
+                <h3 class="font-bold">Add Service</h3>
+                <input id="sname" placeholder="Name" class="border p-2" />
+                <input id="sprice" placeholder="Price (KSh)" class="border p-2" />
+                <input id="sdesc" placeholder="Description" class="border p-2" />
+                <button onclick="addService()" class="bg-blue-500 text-white px-4 py-2">Add</button>
+            </div>
+
+            <div>
+                <h3 class="font-bold">Orders</h3>
+                <div id="orders"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- AUTH -->
+    <section id="auth" class="p-6 hidden">
+        <h2 class="text-2xl font-bold text-blue-600">Account</h2>
+        <input id="email" placeholder="Email" class="border p-2" />
+        <input id="password" type="password" placeholder="Password" class="border p-2" />
+        <button onclick="signUp()" class="bg-blue-600 text-white px-4 py-2">Sign Up</button>
+        <button onclick="signIn()" class="bg-yellow-500 px-4 py-2">Login</button>
+        <p id="authMsg"></p>
+    </section>
+
+    <!-- SITE SCRIPT -->
+    <script>
+        function showPage(id) {
+            document.querySelectorAll('section').forEach(s => s.classList.add('hidden'));
+            document.getElementById(id).classList.remove('hidden');
+        }
+
+        function adminLogin() {
+            const pass = document.getElementById('adminPass').value;
+            if (pass === 'nick@5djey') {
+                document.getElementById('adminLogin').classList.add('hidden');
+                document.getElementById('adminPanel').classList.remove('hidden');
+                loadOrders();
+            } else alert('Wrong password');
+        }
+    </script>
+
+    <!-- SUPABASE SCRIPT -->
+    <script>
+        const emailEl = document.getElementById('').value
+        const SUPABASE_URL = "https://phypulwiydnjrjebfjpm.supabase.co";
+        const SUPABASE_ANON = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBoeXB1bHdpeWRuanJqZWJmanBtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzExNTEwOTEsImV4cCI6MjA4NjcyNzA5MX0.KByt2pb-S0J3myYtLWN6q2JH24nJxA3af3GngVQXBcs";
+        const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
+
+        async function signUp() {
+            const email = emailEl.value;
+            const password = passwordEl.value;
+            const { data, error } = await sb.auth.signUp({ email, password });
+            if (error) return authMsg.innerText = error.message;
+            if (data.user) {
+                await sb.from('profiles').insert({
+                    id: data.user.id,
+                    email: data.user.email
+                });
+            }
+            authMsg.innerText = "Account created";
+        }
+
+        async function signIn() {
+            const email = emailEl.value;
+            const password = passwordEl.value;
+            const { error } = await sb.auth.signInWithPassword({ email, password });
+            authMsg.innerText = error ? error.message : "Logged in";
+        }
+
+        async function addProduct() {
+            const name = pname.value;
+            const price = pprice.value;
+            const description = pdesc.value;
+            await sb.from('products').insert({ name, price, description });
+            loadProducts();
+        }
+
+        async function addService() {
+            const name = sname.value;
+            const price = sprice.value;
+            const description = sdesc.value;
+            await sb.from('services').insert({ name, price, description });
+            loadServices();
+        }
+
+        async function loadProducts() {
+            const { data } = await sb.from('products').select('*');
+            productList.innerHTML = '';
+            data.forEach(p => {
+                const div = document.createElement('div');
+                div.className = 'bg-white p-4 shadow rounded';
+                div.innerHTML = `<h3 class='font-bold'>${p.name}</h3>
+          <p>${p.description || ''}</p>
+          <p class='font-bold mt-2'>KSh ${p.price}</p>
+          <button class='bg-blue-600 text-white px-2 py-1 mt-2' onclick="orderProduct(${p.id},${p.price})">Order</button>`;
+                productList.appendChild(div);
+            });
+        }
+
+        async function loadServices() {
+            const { data } = await sb.from('services').select('*');
+            serviceList.innerHTML = '';
+            data.forEach(s => {
+                const div = document.createElement('div');
+                div.className = 'bg-white p-4 shadow rounded';
+                div.innerHTML = `<h3 class='font-bold'>${s.name}</h3>
+          <p>${s.description || ''}</p>
+          <p class='font-bold mt-2'>KSh ${s.price}</p>
+          <button class='bg-yellow-500 px-2 py-1 mt-2' onclick="orderService(${s.id},${s.price})">Order</button>`;
+                serviceList.appendChild(div);
+            });
+        }
+
+        async function createOrder() {
+            const { data: { user } } = await sb.auth.getUser();
+            if (!user) return alert('Login first');
+            const { data } = await sb.from('orders')
+                .insert({ user_id: user.id })
+                .select()
+                .single();
+            return data.id;
+        }
+
+        async function orderProduct(pid, price) {
+            const orderId = await createOrder();
+            if (!orderId) return;
+            await sb.from('order_items').insert({
+                order_id: orderId,
+                product_id: pid,
+                price: price
+            });
+            alert('Product ordered');
+        }
+
+        async function orderService(sid, price) {
+            const orderId = await createOrder();
+            if (!orderId) return;
+            await sb.from('order_items').insert({
+                order_id: orderId,
+                service_id: sid,
+                price: price
+            });
+            alert('Service ordered');
+        }
+
+        async function loadOrders() {
+            const { data } = await sb
+                .from('orders')
+                .select(`id, user_id, order_items(price, products(name), services(name))`)
+                .order('id', { ascending: false });
+
+            orders.innerHTML = '';
+            data.forEach(o => {
+                let items = '';
+                o.order_items.forEach(i => {
+                    const name = i.products?.name || i.services?.name;
+                    items += `${name} — KSh ${i.price}<br>`;
+                });
+                orders.innerHTML += `<div class='border p-2 mb-2'>
+          <b>Order #${o.id}</b><br>
+          ${items}
+          User: ${o.user_id}
+        </div>`;
+            });
+        }
+
+        loadProducts();
+        loadServices();
+    </script>
+</body>
+
+</html>
