@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NTK Services | Excellence by Nicholas Kiboi</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        ntkBlue: '#1e3a8a',
+                        ntkYellow: '#facc15',
+                    },
+                    animation: {
+                        'fade-in-up': 'fadeInUp 0.8s ease-out forwards',
+                        'float': 'float 3s ease-in-out infinite',
+                    },
+                    keyframes: {
+                        fadeInUp: {
+                            '0%': { opacity: '0', transform: 'translateY(20px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
+                        },
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-10px)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+        .glass { background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(10px); }
+        .hero-gradient {
+            background: radial-gradient(circle at top right, #fefce8, transparent),
+                        radial-gradient(circle at bottom left, #eff6ff, transparent);
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-900 overflow-x-hidden">
+
+    <!-- Navigation -->
+    <nav class="fixed w-full z-50 glass border-b border-slate-200">
+        <div class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <div class="flex items-center space-x-2">
+                <div class="w-10 h-10 bg-ntkBlue rounded-xl flex items-center justify-center shadow-lg">
+                    <span class="text-ntkYellow font-extrabold text-xl">N</span>
+                </div>
+                <span class="text-2xl font-black tracking-tighter text-ntkBlue">NTK <span class="text-ntkYellow">SERVICES</span></span>
+            </div>
+            <div class="hidden md:flex items-center space-x-8 font-semibold text-slate-600">
+                <a href="#" class="hover:text-ntkBlue transition-colors">Catalog</a>
+                <a href="#" class="hover:text-ntkBlue transition-colors">Reviews</a>
+                <a href="#" class="hover:text-ntkBlue transition-colors">Location</a>
+                <a href="#" class="bg-ntkBlue text-white px-6 py-2 rounded-full hover:bg-opacity-90 transition-all shadow-md">Get Started</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="relative min-h-screen flex items-center pt-20 hero-gradient overflow-hidden">
+        <div class="container mx-auto px-6 grid md:grid-cols-2 gap-12 items-center">
+            <div class="animate-fade-in-up">
+                <div class="inline-flex items-center space-x-2 bg-yellow-100 text-yellow-800 px-4 py-1 rounded-full text-sm font-bold mb-6">
+                    <i data-lucide="sparkles" class="w-4 h-4"></i>
+                    <span>Premium Solutions by Nicholas Kiboi</span>
+                </div>
+                <h1 class="text-5xl md:text-7xl font-extrabold text-ntkBlue leading-tight mb-6">
+                    Elevate Your <br>
+                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-ntkBlue to-blue-500">Lifestyle & Business</span>
+                </h1>
+                <p class="text-lg text-slate-600 mb-8 max-w-lg leading-relaxed">
+                    Experience excellence in every detail. NTK Services delivers a curated selection of premium products and professional solutions tailored to your unique needs.
+                </p>
+                <div class="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
+                    <a href="./site.html" class="bg-ntkBlue text-white px-8 py-4 rounded-2xl font-bold text-lg hover:scale-105 transition-transform shadow-xl flex items-center justify-center">
+                        Explore Catalog
+                        <i data-lucide="arrow-right" class="ml-2 w-5 h-5"></i>
+                    </a>
+                    <a href="#" class="bg-white text-ntkBlue border-2 border-slate-200 px-8 py-4 rounded-2xl font-bold text-lg hover:bg-slate-50 transition-colors flex items-center justify-center">
+                        View Reviews
+                    </a>
+                </div>
+            </div>
+            <div class="relative hidden md:block animate-float">
+                <div class="absolute -top-20 -right-20 w-64 h-64 bg-ntkYellow opacity-20 rounded-full blur-3xl"></div>
+                <div class="absolute -bottom-20 -left-20 w-64 h-64 bg-ntkBlue opacity-10 rounded-full blur-3xl"></div>
+                <div class="relative z-10 glass p-8 rounded-[2.5rem] border border-white shadow-2xl">
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="space-y-4">
+                            <div class="h-48 bg-ntkBlue/5 rounded-2xl flex items-center justify-center">
+                                <i data-lucide="shopping-bag" class="w-12 h-12 text-ntkBlue"></i>
+                            </div>
+                            <div class="h-32 bg-ntkYellow/20 rounded-2xl p-4">
+                                <div class="w-8 h-8 bg-white rounded-lg mb-2"></div>
+                                <div class="h-2 w-full bg-white/50 rounded"></div>
+                            </div>
+                        </div>
+                        <div class="space-y-4 pt-8">
+                            <div class="h-32 bg-slate-100 rounded-2xl p-4">
+                                <div class="flex space-x-1 mb-2">
+                                    <div class="w-2 h-2 bg-ntkYellow rounded-full"></div>
+                                    <div class="w-2 h-2 bg-ntkYellow rounded-full"></div>
+                                    <div class="w-2 h-2 bg-ntkYellow rounded-full"></div>
+                                </div>
+                                <div class="h-2 w-3/4 bg-slate-300 rounded"></div>
+                            </div>
+                            <div class="h-48 bg-ntkBlue rounded-2xl flex flex-col items-center justify-center text-white p-4 text-center">
+                                <i data-lucide="map-pin" class="w-8 h-8 mb-2"></i>
+                                <span class="text-xs font-bold">Visit Our Location</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Content Summary Section -->
+    <section class="py-24 bg-white">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-5xl font-black text-ntkBlue mb-4">What's Waiting Inside?</h2>
+                <p class="text-slate-500 max-w-2xl mx-auto">Everything you need to streamline your search for quality products and reliable services, all under one roof.</p>
+            </div>
+            
+            <div class="grid md:grid-cols-3 gap-8">
+                <!-- Feature 1 -->
+                <div class="group p-8 rounded-3xl border border-slate-100 bg-slate-50 hover:bg-white hover:shadow-2xl hover:border-ntkYellow transition-all duration-300">
+                    <div class="w-14 h-14 bg-white rounded-2xl flex items-center justify-center shadow-md mb-6 group-hover:scale-110 transition-transform">
+                        <i data-lucide="layout-grid" class="text-ntkBlue w-7 h-7"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3 text-ntkBlue">Premium Catalog</h3>
+                    <p class="text-slate-600 mb-6">Browse our extensive list of curated items and professional services, handpicked for quality.</p>
+                    <ul class="space-y-3 text-sm text-slate-500">
+                        <li class="flex items-center"><i data-lucide="check" class="w-4 h-4 text-green-500 mr-2"></i> Quality Guaranteed</li>
+                        <li class="flex items-center"><i data-lucide="check" class="w-4 h-4 text-green-500 mr-2"></i> Instant Inquiries</li>
+                    </ul>
+                </div>
+
+                <!-- Feature 2 -->
+                <div class="group p-8 rounded-3xl border border-slate-100 bg-slate-50 hover:bg-white hover:shadow-2xl hover:border-ntkYellow transition-all duration-300">
+                    <div class="w-14 h-14 bg-white rounded-2xl flex items-center justify-center shadow-md mb-6 group-hover:scale-110 transition-transform">
+                        <i data-lucide="star" class="text-ntkBlue w-7 h-7"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3 text-ntkBlue">Customer Reviews</h3>
+                    <p class="text-slate-600 mb-6">Transparency is key. Read real feedback from our community of satisfied clients and partners.</p>
+                    <ul class="space-y-3 text-sm text-slate-500">
+                        <li class="flex items-center"><i data-lucide="check" class="w-4 h-4 text-green-500 mr-2"></i> 7-Star Rating System</li>
+                        <li class="flex items-center"><i data-lucide="check" class="w-4 h-4 text-green-500 mr-2"></i> Verified Testimonials</li>
+                    </ul>
+                </div>
+
+                <!-- Feature 3 -->
+                <div class="group p-8 rounded-3xl border border-slate-100 bg-slate-50 hover:bg-white hover:shadow-2xl hover:border-ntkYellow transition-all duration-300">
+                    <div class="w-14 h-14 bg-white rounded-2xl flex items-center justify-center shadow-md mb-6 group-hover:scale-110 transition-transform">
+                        <i data-lucide="navigation" class="text-ntkBlue w-7 h-7"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3 text-ntkBlue">Direct Access</h3>
+                    <p class="text-slate-600 mb-6">Find us easily with our integrated location services and get in touch with Nicholas directly.</p>
+                    <ul class="space-y-3 text-sm text-slate-500">
+                        <li class="flex items-center"><i data-lucide="check" class="w-4 h-4 text-green-500 mr-2"></i> Real-time Directions</li>
+                        <li class="flex items-center"><i data-lucide="check" class="w-4 h-4 text-green-500 mr-2"></i> Personalized Support</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats / Trust Section -->
+    <section class="py-16 bg-ntkBlue text-white">
+        <div class="container mx-auto px-6 grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+            <div>
+                <div class="text-4xl font-black text-ntkYellow mb-2">100%</div>
+                <div class="text-blue-200 text-sm uppercase tracking-widest">Satisfaction</div>
+            </div>
+            <div>
+                <div class="text-4xl font-black text-ntkYellow mb-2">24/7</div>
+                <div class="text-blue-200 text-sm uppercase tracking-widest">Inquiry Support</div>
+            </div>
+            <div>
+                <div class="text-4xl font-black text-ntkYellow mb-2">4+</div>
+                <div class="text-blue-200 text-sm uppercase tracking-widest">Premium Items</div>
+            </div>
+            <div>
+                <div class="text-4xl font-black text-ntkYellow mb-2">7/7</div>
+                <div class="text-blue-200 text-sm uppercase tracking-widest">Star Service</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="py-24 relative overflow-hidden">
+        <div class="container mx-auto px-6">
+            <div class="bg-gradient-to-br from-ntkBlue to-blue-900 rounded-[3rem] p-12 md:p-20 text-center relative overflow-hidden shadow-2xl">
+                <div class="absolute top-0 right-0 w-96 h-96 bg-white opacity-5 rounded-full -mr-20 -mt-20"></div>
+                <div class="relative z-10">
+                    <h2 class="text-4xl md:text-6xl font-black text-white mb-8">Ready to step inside?</h2>
+                    <p class="text-blue-100 text-lg mb-12 max-w-xl mx-auto">Join our community today. Create an account to unlock full access to inquiries, reviews, and exclusive offers.</p>
+                    <div class="flex flex-col sm:flex-row justify-center items-center space-y-4 sm:space-y-0 sm:space-x-6">
+                        <a href="./site.html" class="w-full sm:w-auto bg-ntkYellow text-ntkBlue px-10 py-5 rounded-2xl font-black text-xl hover:bg-white transition-colors shadow-xl">
+                            ENTER THE SITE
+                        </a>
+                        <a href="#" class="text-white font-bold flex items-center hover:underline">
+                            Contact Admin <i data-lucide="external-link" class="ml-2 w-4 h-4"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="py-12 border-t border-slate-200">
+        <div class="container mx-auto px-6 flex flex-col md:flex-row justify-between items-center">
+            <div class="flex items-center space-x-2 mb-6 md:mb-0">
+                <div class="w-8 h-8 bg-ntkBlue rounded flex items-center justify-center">
+                    <span class="text-ntkYellow font-bold text-sm">N</span>
+                </div>
+                <span class="font-black text-ntkBlue tracking-tighter">NTK SERVICES</span>
+            </div>
+            <p class="text-slate-400 text-sm">
+                &copy; 2026 NTK Services. Designed for Excellence by <span class="text-ntkBlue font-bold underline">Nicholas Kiboi</span>.
+            </p>
+            <div class="flex space-x-6 mt-6 md:mt-0">
+                <a href="#" class="text-slate-400 hover:text-ntkBlue"><i data-lucide="instagram" class="w-5 h-5"></i></a>
+                <a href="#" class="text-slate-400 hover:text-ntkBlue"><i data-lucide="twitter" class="w-5 h-5"></i></a>
+                <a href="#" class="text-slate-400 hover:text-ntkBlue"><i data-lucide="linkedin" class="w-5 h-5"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Initialize Lucide Icons
+        lucide.createIcons();
+
+        // Simple scroll animation for the nav
+        window.addEventListener('scroll', () => {
+            const nav = document.querySelector('nav');
+            if (window.scrollY > 50) {
+                nav.classList.add('py-2', 'shadow-xl');
+                nav.classList.remove('py-4');
+            } else {
+                nav.classList.remove('py-2', 'shadow-xl');
+                nav.classList.add('py-4');
+            }
+        });
+    </script>
+</body>
+</html>
