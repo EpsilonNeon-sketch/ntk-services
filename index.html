@@ -1,429 +1,170 @@
 <!DOCTYPE html>
-<html lang="en" class="scroll-smooth">
+<html lang="en">
 
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>NTK Services | Premium Installation & Moving</title>
-    <meta name="description"
-        content="Professional TV mounting, secure moving, storage solutions, and electronics setup. Fast, reliable, and perfectly executed.">
+    <title>NTK Services</title>
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="icon" href="ntklogo.png">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap"
-        rel="stylesheet">
+    <link rel="icon" href="ntklogo.png">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: {
-                        sans: ['Inter', 'sans-serif'],
-                        heading: ['Plus Jakarta Sans', 'sans-serif'],
-                    },
-                    colors: {
-                        brand: {
-                            50: '#eff6ff',
-                            100: '#dbeafe',
-                            500: '#3b82f6',
-                            600: '#2563eb',
-                            700: '#1d4ed8',
-                            900: '#1e3a8a',
-                        }
-                    },
-                    animation: {
-                        'fade-in': 'fadeIn 0.5s ease-out forwards',
-                        'slide-up': 'slideUp 0.5s ease-out forwards',
-                    },
-                    keyframes: {
-                        fadeIn: {
-                            '0%': { opacity: '0' },
-                            '100%': { opacity: '1' },
-                        },
-                        slideUp: {
-                            '0%': { opacity: '0', transform: 'translateY(20px)' },
-                            '100%': { opacity: '1', transform: 'translateY(0)' },
-                        }
-                    }
-                }
-            }
-        }
-    </script>
+    <!-- Tailwind CSS v4 -->
+    <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
 
     <!-- Supabase -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
     <style>
         body {
+            font-family: 'Inter', sans-serif;
             -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
         }
 
-        /* Hide scrollbar for nav */
-        .no-scrollbar::-webkit-scrollbar {
-            display: none;
+        /* Hide scrollbar for a cleaner look in the nav if it wraps */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
         }
 
-        .no-scrollbar {
-            -ms-overflow-style: none;
-            scrollbar-width: none;
+        ::-webkit-scrollbar-track {
+            background: transparent;
         }
 
-        /* Dialog Backdrop */
-        dialog::backdrop {
-            background: rgba(15, 23, 42, 0.6);
-            backdrop-filter: blur(4px);
-        }
-
-        .page-section {
-            display: none;
-        }
-
-        .page-section.active {
-            display: block;
-            animation: fadeIn 0.4s ease-out forwards;
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
         }
     </style>
 </head>
 
-<body class="bg-gray-50 text-gray-800 min-h-screen flex flex-col font-sans selection:bg-brand-500 selection:text-white">
+<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col">
 
-    <!-- HAMBURGER MENU BUTTON -->
-    <button onclick="toggleSideNav()"
-        class="fixed top-4 left-4 z-50 p-3 bg-white rounded-xl shadow-lg hover:shadow-xl transition-all border border-gray-200"
-        id="hamburgerBtn">
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-            class="transition-transform duration-300" id="hamburgerIcon">
-            <line x1="4" x2="20" y1="12" y2="12" />
-            <line x1="4" x2="20" y1="6" y2="6" />
-            <line x1="4" x2="20" y1="18" y2="18" />
-        </svg>
-    </button>
-
-    <!-- SIDE NAVIGATION -->
-    <aside id="sideNav"
-        class="fixed top-0 left-0 h-full w-72 bg-white shadow-2xl z-40 transform -translate-x-full transition-transform duration-300 ease-in-out border-r border-gray-200 flex flex-col">
-
-        <!-- Logo in Side Nav -->
-        <div class="p-6 border-b border-gray-100">
-            <div class="flex items-center gap-3 cursor-pointer group" onclick="showPage('home'); toggleSideNav();">
-                <div
-                    class="bg-gradient-to-br from-brand-500 to-brand-700 text-white p-2.5 rounded-xl shadow-lg shadow-brand-500/30 group-hover:scale-105 transition-transform">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                        stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                        <rect width="20" height="14" x="2" y="3" rx="2" />
-                        <line x1="8" x2="16" y1="21" y2="21" />
-                        <line x1="12" x2="12" y1="17" y2="21" />
-                    </svg>
+    <!-- NAVIGATION -->
+    <nav class="sticky top-0 z-50 bg-white/80 backdrop-blur-lg border-b border-slate-200 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col sm:flex-row justify-between items-center py-4 gap-4">
+                <!-- Logo -->
+                <div class="flex items-center gap-2 cursor-pointer" onclick="showPage('home')">
+                    <div class="bg-blue-600 text-white p-2 rounded-xl">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect width="20" height="14" x="2" y="3" rx="2" />
+                            <line x1="8" x2="16" y1="21" y2="21" />
+                            <line x1="12" x2="12" y1="17" y2="21" />
+                        </svg>
+                    </div>
+                    <h1 class="text-xl font-extrabold tracking-tight text-slate-900">NTK<span
+                            class="text-blue-600">Services</span></h1>
                 </div>
-                <h1 class="text-xl font-heading font-extrabold tracking-tight text-gray-900">NTK<span
-                        class="text-brand-600">Services</span></h1>
+
+                <!-- Nav Links -->
+                <div
+                    class="flex flex-wrap justify-center gap-1 sm:gap-2 bg-slate-100/50 p-1 rounded-2xl border border-slate-200/60">
+                    <button onclick="showPage('home')"
+                        class="nav-btn px-4 py-2 rounded-xl text-sm font-medium text-slate-600 hover:text-slate-900 hover:bg-white hover:shadow-sm transition-all flex items-center gap-2"
+                        data-target="home">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+                            <polyline points="9 22 9 12 15 12 15 22" />
+                        </svg>
+                        <span class="hidden sm:inline">Home</span>
+                    </button>
+                    <button onclick="showPage('shop')"
+                        class="nav-btn px-4 py-2 rounded-xl text-sm font-medium text-slate-600 hover:text-slate-900 hover:bg-white hover:shadow-sm transition-all flex items-center gap-2"
+                        data-target="shop">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z" />
+                            <path d="M3 6h18" />
+                            <path d="M16 10a4 4 0 0 1-8 0" />
+                        </svg>
+                        <span class="hidden sm:inline">Shop</span>
+                    </button>
+                    <button id="cartBtn" onclick="showCart()"
+                        class="nav-btn px-4 py-2 rounded-xl text-sm font-medium text-slate-600 hover:text-slate-900 hover:bg-white hover:shadow-sm transition-all flex items-center gap-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="9" cy="21" r="1" />
+                            <circle cx="20" cy="21" r="1" />
+                            <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" />
+                        </svg>
+                        <span class="hidden sm:inline">Cart (0)</span>
+                    </button>
+                    <button onclick="showPage('admin')"
+                        class="nav-btn px-4 py-2 rounded-xl text-sm font-medium text-slate-600 hover:text-slate-900 hover:bg-white hover:shadow-sm transition-all flex items-center gap-2"
+                        data-target="admin">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10" />
+                            <path d="m9 12 2 2 4-4" />
+                        </svg>
+                        <span class="hidden sm:inline">Admin</span>
+                    </button>
+                    <button onclick="showPage('auth')"
+                        class="nav-btn px-4 py-2 rounded-xl text-sm font-medium text-slate-600 hover:text-slate-900 hover:bg-white hover:shadow-sm transition-all flex items-center gap-2"
+                        data-target="auth">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
+                            <circle cx="12" cy="7" r="4" />
+                        </svg>
+                        <span class="hidden sm:inline">Account</span>
+                    </button>
+                </div>
             </div>
         </div>
-
-        <!-- Nav Links -->
-        <nav class="flex-1 p-4 overflow-y-auto">
-            <div class="space-y-2">
-                <button onclick="showPage('home'); toggleSideNav();"
-                    class="side-nav-btn w-full text-left px-4 py-3 rounded-xl text-sm font-semibold text-gray-500 hover:text-gray-900 hover:bg-gray-50 transition-all flex items-center gap-3"
-                    data-target="home">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
-                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
-                        <polyline points="9 22 9 12 15 12 15 22" />
-                    </svg>
-                    <span>Home</span>
-                </button>
-                <button onclick="showPage('shop'); toggleSideNav();"
-                    class="side-nav-btn w-full text-left px-4 py-3 rounded-xl text-sm font-semibold text-gray-500 hover:text-gray-900 hover:bg-gray-50 transition-all flex items-center gap-3"
-                    data-target="shop">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
-                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z" />
-                        <path d="M3 6h18" />
-                        <path d="M16 10a4 4 0 0 1-8 0" />
-                    </svg>
-                    <span>Services & Shop</span>
-                </button>
-                <button id="cartBtnSide" onclick="showCart(); toggleSideNav();"
-                    class="side-nav-btn w-full text-left px-4 py-3 rounded-xl text-sm font-semibold text-gray-500 hover:text-gray-900 hover:bg-gray-50 transition-all flex items-center gap-3 relative">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
-                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <circle cx="9" cy="21" r="1" />
-                        <circle cx="20" cy="21" r="1" />
-                        <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" />
-                    </svg>
-                    <span>Cart (<span id="cartCountSide">0</span>)</span>
-                </button>
-                <button onclick="showPage('reviews'); toggleSideNav();"
-                    class="side-nav-btn w-full text-left px-4 py-3 rounded-xl text-sm font-semibold text-gray-500 hover:text-gray-900 hover:bg-gray-50 transition-all flex items-center gap-3"
-                    data-target="reviews">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
-                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <polygon
-                            points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
-                    </svg>
-                    <span>Reviews</span>
-                </button>
-                <button onclick="showPage('auth'); toggleSideNav();"
-                    class="side-nav-btn w-full text-left px-4 py-3 rounded-xl text-sm font-semibold text-gray-500 hover:text-gray-900 hover:bg-gray-50 transition-all flex items-center gap-3"
-                    data-target="auth">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
-                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
-                        <circle cx="12" cy="7" r="4" />
-                    </svg>
-                    <span>Account</span>
-                </button>
-                <button onclick="showPage('admin'); toggleSideNav();"
-                    class="side-nav-btn w-full text-left px-4 py-3 rounded-xl text-sm font-semibold text-gray-500 hover:text-gray-900 hover:bg-gray-50 transition-all flex items-center gap-3"
-                    data-target="admin">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
-                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10" />
-                        <path d="m9 12 2 2 4-4" />
-                    </svg>
-                    <span>Admin</span>
-                </button>
-            </div>
-        </nav>
-
-        <!-- Footer in Side Nav -->
-        <div class="p-4 border-t border-gray-100">
-            <p class="text-xs text-gray-400 text-center">Powered by <a
-                    href="https://epsilonneon-sketch.github.io/epsilon-site-v1/" target="_blank"
-                    class="text-brand-500 hover:text-brand-600 font-medium">Epsilon</a>
-            </p>
-        </div>
-    </aside>
-
-    <!-- Overlay backdrop -->
-    <div id="navOverlay" onclick="toggleSideNav()"
-        class="fixed inset-0 bg-black/50 z-30 opacity-0 pointer-events-none transition-opacity duration-300">
-    </div>
+    </nav>
 
     <!-- MAIN CONTENT AREA -->
-    <main class="flex-grow w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 relative ml-0 sm:ml-4">
+    <main class="flex-grow w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
 
-        <!-- HOME SECTION (LANDING PAGE) -->
-        <section id="home" class="page-section active">
-            <!-- Hero -->
-            <div class="grid lg:grid-cols-2 gap-12 items-center min-h-[70vh] py-10">
-                <div class="space-y-8 animate-slide-up text-center lg:text-left">
-                    <div
-                        class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-brand-50 text-brand-700 text-sm font-bold border border-brand-100 shadow-sm">
-                        <span class="relative flex h-2.5 w-2.5">
-                            <span
-                                class="animate-ping absolute inline-flex h-full w-full rounded-full bg-brand-400 opacity-75"></span>
-                            <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-brand-600"></span>
-                        </span>
-                        Available for new projects in your area
-                    </div>
-
-                    <h2
-                        class="text-5xl sm:text-6xl lg:text-7xl font-heading font-extrabold text-gray-900 tracking-tight leading-[1.1]">
-                        Elevate Your <br>
-                        <span class="text-transparent bg-clip-text bg-gradient-to-r from-brand-600 to-indigo-600">Living
-                            Space.</span>
-                    </h2>
-
-                    <p class="text-lg sm:text-xl text-gray-500 max-w-xl mx-auto lg:mx-0 leading-relaxed">
-                        Expert TV mounting, secure moving, smart storage solutions, and seamless electronics setup.
-                        Fast, reliable, and perfectly executed by professionals.
-                    </p>
-
-                    <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start pt-4">
-                        <button onclick="showPage('shop')"
-                            class="px-8 py-4 bg-gray-900 hover:bg-brand-600 text-white rounded-2xl font-bold text-lg shadow-xl shadow-gray-900/20 hover:shadow-brand-500/30 transition-all hover:-translate-y-1 flex items-center justify-center gap-2">
-                            Explore Services
-                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
-                                fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
-                                stroke-linejoin="round">
-                                <path d="M5 12h14" />
-                                <path d="m12 5 7 7-7 7" />
-                            </svg>
-                        </button>
-                        <button onclick="showPage('reviews')"
-                            class="px-8 py-4 bg-white hover:bg-gray-50 text-gray-900 border-2 border-gray-200 rounded-2xl font-bold text-lg transition-all hover:-translate-y-1 flex items-center justify-center gap-2">
-                            Read Reviews
-                        </button>
-                    </div>
-
-                    <div
-                        class="pt-6 flex items-center justify-center lg:justify-start gap-4 text-sm text-gray-500 font-medium">
-                        <div class="flex -space-x-3">
-                            <img class="w-10 h-10 rounded-full border-2 border-white object-cover"
-                                src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=100&q=80"
-                                alt="Customer">
-                            <img class="w-10 h-10 rounded-full border-2 border-white object-cover"
-                                src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=100&q=80"
-                                alt="Customer">
-                            <img class="w-10 h-10 rounded-full border-2 border-white object-cover"
-                                src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=100&q=80"
-                                alt="Customer">
-                            <div
-                                class="w-10 h-10 rounded-full border-2 border-white bg-gray-100 flex items-center justify-center text-xs font-bold text-gray-600">
-                                many customers</div>
-                        </div>
-                        <p>Trusted by happy customers</p>
-                    </div>
-                </div>
-
-                <div class="relative hidden lg:block animate-fade-in" style="animation-delay: 0.2s;">
-                    <div
-                        class="absolute inset-0 bg-gradient-to-tr from-brand-500/20 to-transparent rounded-[2.5rem] transform translate-x-4 translate-y-4 -z-10">
-                    </div>
-                    <img src="https://images.unsplash.com/photo-1593640408182-31c70c8268f5?auto=format&fit=crop&w=1000&q=80"
-                        alt="Modern Living Room Setup"
-                        class="rounded-[2.5rem] shadow-2xl object-cover h-[600px] w-full border border-white/50">
-
-                    <!-- Floating Badge -->
-                    <div class="absolute bottom-10 -left-10 bg-white p-4 rounded-2xl shadow-xl flex items-center gap-4 border border-gray-100 animate-bounce"
-                        style="animation-duration: 3s;">
-                        <div
-                            class="w-12 h-12 bg-green-100 text-green-600 rounded-full flex items-center justify-center">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                                fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"
-                                stroke-linejoin="round">
-                                <polyline points="20 6 9 17 4 12"></polyline>
-                            </svg>
-                        </div>
-                        <div>
-                            <p class="text-sm text-gray-500 font-semibold">Service Rating</p>
-                            <p class="text-xl font-heading font-extrabold text-gray-900">5.0 / 5.0</p>
-                        </div>
-                    </div>
-                </div>
+        <!-- HOME SECTION -->
+        <section id="home" class="page-section flex flex-col items-center justify-center text-center py-12 sm:py-24">
+            <div
+                class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-50 text-blue-600 text-sm font-semibold mb-6 border border-blue-100">
+                <span class="relative flex h-2 w-2">
+                    <span
+                        class="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
+                    <span class="relative inline-flex rounded-full h-2 w-2 bg-blue-500"></span>
+                </span>
+                Available for new projects
             </div>
-
-            <!-- Features Grid -->
-            <div class="py-24">
-                <div class="text-center max-w-2xl mx-auto mb-16">
-                    <h3 class="text-3xl md:text-4xl font-heading font-bold text-gray-900 mb-4">Everything you need,
-                        <br>handled with care.
-                    </h3>
-                    <p class="text-gray-500 text-lg">We provide end-to-end solutions for your home and office setup
-                        needs.</p>
-                </div>
-
-                <div class="grid md:grid-cols-3 gap-8">
-                    <!-- Feature 1 -->
-                    <div
-                        class="bg-white p-8 rounded-3xl shadow-sm border border-gray-100 hover:shadow-xl transition-all hover:-translate-y-1 group">
-                        <div
-                            class="w-14 h-14 bg-blue-50 text-blue-600 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform group-hover:bg-blue-600 group-hover:text-white">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24"
-                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                stroke-linejoin="round">
-                                <rect width="20" height="14" x="2" y="3" rx="2" />
-                                <line x1="8" x2="16" y1="21" y2="21" />
-                                <line x1="12" x2="12" y1="17" y2="21" />
-                            </svg>
-                        </div>
-                        <h4 class="text-xl font-bold text-gray-900 mb-3 font-heading">TV Mounting</h4>
-                        <p class="text-gray-500 leading-relaxed">Perfectly leveled, securely fastened, and cables
-                            hidden. Transform your viewing experience.</p>
-                    </div>
-                    <!-- Feature 2 -->
-                    <div
-                        class="bg-white p-8 rounded-3xl shadow-sm border border-gray-100 hover:shadow-xl transition-all hover:-translate-y-1 group">
-                        <div
-                            class="w-14 h-14 bg-amber-50 text-amber-600 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform group-hover:bg-amber-500 group-hover:text-white">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24"
-                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                stroke-linejoin="round">
-                                <path
-                                    d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z" />
-                                <path d="m3.3 7 8.7 5 8.7-5" />
-                                <path d="M12 22V12" />
-                            </svg>
-                        </div>
-                        <h4 class="text-xl font-bold text-gray-900 mb-3 font-heading">Secure Moving</h4>
-                        <p class="text-gray-500 leading-relaxed">Careful packing, safe transport, and organized
-                            unpacking for your valuable electronics and furniture.</p>
-                    </div>
-                    <!-- Feature 3 -->
-                    <div
-                        class="bg-white p-8 rounded-3xl shadow-sm border border-gray-100 hover:shadow-xl transition-all hover:-translate-y-1 group">
-                        <div
-                            class="w-14 h-14 bg-purple-50 text-purple-600 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform group-hover:bg-purple-600 group-hover:text-white">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24"
-                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                stroke-linejoin="round">
-                                <path
-                                    d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z" />
-                            </svg>
-                        </div>
-                        <h4 class="text-xl font-bold text-gray-900 mb-3 font-heading">Smart Setup</h4>
-                        <p class="text-gray-500 leading-relaxed">From home theaters to smart home devices, we configure
-                            everything to work seamlessly together.</p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- CTA Section -->
-            <div class="bg-gray-900 rounded-[2.5rem] p-10 sm:p-16 text-center relative overflow-hidden mb-10">
-                <div
-                    class="absolute top-0 left-0 w-full h-full bg-[url('https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1500&q=80')] opacity-10 bg-cover bg-center mix-blend-overlay">
-                </div>
-                <div class="relative z-10 max-w-3xl mx-auto">
-                    <h2 class="text-3xl sm:text-5xl font-heading font-bold text-white mb-6">Ready to upgrade your space?
-                    </h2>
-                    <p class="text-gray-300 text-lg mb-10">Browse our services, add them to your cart, and let our
-                        professionals handle the rest.</p>
-                    <button onclick="showPage('shop')"
-                        class="px-8 py-4 bg-brand-500 hover:bg-brand-400 text-white rounded-2xl font-bold text-lg shadow-lg shadow-brand-500/50 transition-all hover:scale-105">
-                        Get Started Now
-                    </button>
-                    <p class="mt-8 text-sm text-gray-400 font-medium">Powered By <a
-                            href="https://epsilonneon-sketch.github.io/epsilon-site-v1/" target="_blank"
-                            class="text-brand-400 hover:text-brand-300 underline underline-offset-4 decoration-brand-400/30">Epsilon</a>
-                    </p>
-                </div>
+            <h2 class="text-4xl sm:text-6xl font-extrabold text-slate-900 tracking-tight leading-tight max-w-3xl">
+                Expert Installation & <br class="hidden sm:block" /> Moving Services
+            </h2>
+            <p class="mt-6 text-lg sm:text-xl text-slate-500 max-w-2xl leading-relaxed">
+                Professional TV mounting, secure moving, storage solutions, and electronics setup. Fast, reliable, and
+                perfectly executed.
+            </p>
+            <div class="mt-10 flex flex-col sm:flex-row gap-4">
+                <button onclick="showPage('shop')"
+                    class="px-8 py-4 bg-blue-600 hover:bg-blue-700 text-white rounded-2xl font-semibold shadow-lg shadow-blue-600/20 transition-all hover:-translate-y-0.5 focus:ring-4 focus:ring-blue-100 flex items-center justify-center gap-2">
+                    View Services
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M5 12h14" />
+                        <path d="m12 5 7 7-7 7" />
+                    </svg>
+                </button>
+                <button onclick="showPage('auth')"
+                    class="px-8 py-4 bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 rounded-2xl font-semibold transition-all hover:-translate-y-0.5 focus:ring-4 focus:ring-slate-100">
+                    Create Account
+                </button>
             </div>
         </section>
 
         <!-- SHOP SECTION -->
-        <section id="shop" class="page-section">
-            <div class="text-center max-w-3xl mx-auto mb-16 pt-8">
-                <h2 class="text-4xl md:text-5xl font-heading font-extrabold text-gray-900 mb-4">Our Services & Products
-                </h2>
-                <p class="text-lg text-gray-500">Select the items you need, add them to your cart, and checkout
-                    seamlessly.</p>
-                <p>Note the images displayed on each product and services are random images provided for siplay they do
-                    not represent the actual product or services.</p>
-            </div>
-
-            <div class="mb-20">
-                <div class="flex items-center gap-3 mb-8 border-b border-gray-200 pb-4">
-                    <div class="p-2.5 bg-blue-100 text-blue-600 rounded-xl">
+        <section id="shop" class="page-section hidden">
+            <div class="mb-12">
+                <div class="flex items-center gap-3 mb-6">
+                    <div class="p-2 bg-amber-100 text-amber-600 rounded-lg">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                            stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                            <path
-                                d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z" />
-                        </svg>
-                    </div>
-                    <h3 class="text-3xl font-heading font-bold text-gray-900">Professional Services</h3>
-                </div>
-                <div id="serviceList" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                    <!-- Services injected via JS -->
-                    <div class="col-span-full py-12 flex justify-center">
-                        <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-brand-600"></div>
-                    </div>
-                </div>
-            </div>
-
-            <div>
-                <div class="flex items-center gap-3 mb-8 border-b border-gray-200 pb-4">
-                    <div class="p-2.5 bg-amber-100 text-amber-600 rounded-xl">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                            stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <path d="m7.5 4.27 9 5.15" />
                             <path
                                 d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z" />
@@ -431,165 +172,50 @@
                             <path d="M12 22V12" />
                         </svg>
                     </div>
-                    <h3 class="text-3xl font-heading font-bold text-gray-900">Equipment & Products</h3>
+                    <h2 class="text-3xl font-bold text-slate-900 tracking-tight">Products</h2>
                 </div>
-                <div id="productList" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div id="productList" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                     <!-- Products injected via JS -->
-                    <div class="col-span-full py-12 flex justify-center">
-                        <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-amber-600"></div>
-                    </div>
                 </div>
             </div>
-        </section>
 
-        <!-- REVIEWS SECTION -->
-        <section id="reviews" class="page-section">
-            <div class="max-w-4xl mx-auto pt-8">
-                <div class="text-center mb-16">
-                    <h2 class="text-4xl md:text-5xl font-heading font-extrabold text-gray-900 mb-4">Client Testimonials
-                    </h2>
-                    <p class="text-lg text-gray-500">Don't just take our word for it. See what our clients have to say.
-                    </p>
-                </div>
-
-                <!-- Add Review Form -->
-                <div
-                    class="bg-white p-8 sm:p-10 rounded-[2rem] shadow-xl shadow-gray-200/50 border border-gray-100 mb-12 relative overflow-hidden">
-                    <div class="absolute top-0 right-0 w-32 h-32 bg-amber-50 rounded-bl-[100px] -z-0"></div>
-                    <div class="relative z-10">
-                        <h3 class="font-heading font-bold text-2xl text-gray-900 mb-6 flex items-center gap-2">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" class="text-amber-500"
-                                viewBox="0 0 24 24" fill="currentColor">
-                                <polygon
-                                    points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
-                            </svg>
-                            Share Your Experience
-                        </h3>
-                        <div class="space-y-5">
-                            <div class="grid sm:grid-cols-2 gap-5">
-                                <div>
-                                    <label class="block text-sm font-bold text-gray-700 mb-2">Your Name</label>
-                                    <input id="reviewName" type="text" placeholder="John Doe"
-                                        class="w-full px-5 py-3.5 rounded-xl border border-gray-200 bg-gray-50 focus:bg-white focus:ring-2 focus:ring-amber-500 focus:border-amber-500 outline-none transition-all" />
-                                </div>
-                                <div>
-                                    <label class="block text-sm font-bold text-gray-700 mb-2">Rating</label>
-                                    <div class="flex gap-2 bg-gray-50 px-5 py-3.5 rounded-xl border border-gray-200 justify-between sm:justify-start"
-                                        id="starRating">
-                                        <button onclick="setRating(1)"
-                                            class="star-btn text-2xl text-gray-300 hover:text-amber-400 hover:scale-110 transition-all focus:outline-none"
-                                            data-rating="1">★</button>
-                                        <button onclick="setRating(2)"
-                                            class="star-btn text-2xl text-gray-300 hover:text-amber-400 hover:scale-110 transition-all focus:outline-none"
-                                            data-rating="2">★</button>
-                                        <button onclick="setRating(3)"
-                                            class="star-btn text-2xl text-gray-300 hover:text-amber-400 hover:scale-110 transition-all focus:outline-none"
-                                            data-rating="3">★</button>
-                                        <button onclick="setRating(4)"
-                                            class="star-btn text-2xl text-gray-300 hover:text-amber-400 hover:scale-110 transition-all focus:outline-none"
-                                            data-rating="4">★</button>
-                                        <button onclick="setRating(5)"
-                                            class="star-btn text-2xl text-gray-300 hover:text-amber-400 hover:scale-110 transition-all focus:outline-none"
-                                            data-rating="5">★</button>
-                                    </div>
-                                </div>
-                            </div>
-                            <div>
-                                <label class="block text-sm font-bold text-gray-700 mb-2">Your Review</label>
-                                <textarea id="reviewText" placeholder="Tell us about the service..." rows="4"
-                                    class="w-full px-5 py-3.5 rounded-xl border border-gray-200 bg-gray-50 focus:bg-white focus:ring-2 focus:ring-amber-500 focus:border-amber-500 outline-none transition-all resize-none"></textarea>
-                            </div>
-                            <button onclick="submitReview()"
-                                class="w-full sm:w-auto px-8 bg-gray-900 hover:bg-amber-500 text-white font-bold py-4 rounded-xl transition-colors flex justify-center items-center gap-2 shadow-md">
-                                Submit Review
-                            </button>
-                        </div>
+            <div class="mt-16">
+                <div class="flex items-center gap-3 mb-6">
+                    <div class="p-2 bg-blue-100 text-blue-600 rounded-lg">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path
+                                d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z" />
+                        </svg>
                     </div>
+                    <h2 class="text-3xl font-bold text-slate-900 tracking-tight">Services</h2>
                 </div>
-
-                <!-- Reviews List -->
-                <div id="reviewsList" class="grid gap-6">
-                    <div class="py-12 flex justify-center">
-                        <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-600"></div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- AUTH SECTION -->
-        <section id="auth" class="page-section">
-            <div class="min-h-[60vh] flex items-center justify-center pt-8">
-                <div class="w-full max-w-md">
-                    <div
-                        class="bg-white p-8 sm:p-10 rounded-[2rem] shadow-2xl shadow-gray-200/50 border border-gray-100">
-                        <div class="text-center mb-10">
-                            <div
-                                class="w-16 h-16 bg-gradient-to-br from-brand-500 to-brand-700 text-white rounded-2xl flex items-center justify-center mx-auto mb-5 shadow-lg shadow-brand-500/30">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"
-                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                    stroke-linejoin="round">
-                                    <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
-                                    <circle cx="12" cy="7" r="4" />
-                                </svg>
-                            </div>
-                            <h2 class="text-3xl font-heading font-extrabold text-gray-900">Welcome Back</h2>
-                            <p class="text-gray-500 mt-2">Sign in or create an account to manage orders.</p>
-                        </div>
-
-                        <div class="space-y-5">
-                            <div>
-                                <label class="block text-sm font-bold text-gray-700 mb-2">Email Address</label>
-                                <input id="email" type="email" placeholder="you@example.com"
-                                    class="w-full px-5 py-4 rounded-xl border border-gray-200 bg-gray-50 focus:bg-white focus:ring-2 focus:ring-brand-500 outline-none transition-all font-medium" />
-                            </div>
-                            <div>
-                                <label class="block text-sm font-bold text-gray-700 mb-2">Password</label>
-                                <input id="password" type="password" placeholder="••••••••"
-                                    class="w-full px-5 py-4 rounded-xl border border-gray-200 bg-gray-50 focus:bg-white focus:ring-2 focus:ring-brand-500 outline-none transition-all font-medium" />
-                            </div>
-
-                            <div class="pt-4 grid grid-cols-2 gap-4">
-                                <button onclick="signIn()"
-                                    class="w-full bg-gray-900 hover:bg-brand-600 text-white font-bold py-4 rounded-xl transition-all shadow-md hover:shadow-lg">
-                                    Login
-                                </button>
-                                <button onclick="signUp()"
-                                    class="w-full bg-white hover:bg-gray-50 text-gray-900 border-2 border-gray-200 font-bold py-4 rounded-xl transition-all">
-                                    Sign Up
-                                </button>
-                            </div>
-
-                            <div id="authMsgContainer"
-                                class="hidden mt-6 p-4 rounded-xl text-center text-sm font-bold border">
-                                <p id="authMsg"></p>
-                            </div>
-                        </div>
-                    </div>
+                <div id="serviceList" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- Services injected via JS -->
                 </div>
             </div>
         </section>
 
         <!-- ADMIN SECTION -->
-        <section id="admin" class="page-section">
+        <section id="admin" class="page-section hidden">
             <!-- Admin Login -->
-            <div id="adminLogin" class="min-h-[60vh] flex items-center justify-center pt-8">
-                <div
-                    class="w-full max-w-md bg-white p-8 sm:p-10 rounded-[2rem] shadow-2xl shadow-gray-200/50 border border-gray-100 text-center">
+            <div id="adminLogin" class="max-w-md mx-auto mt-10">
+                <div class="bg-white p-8 rounded-3xl shadow-sm border border-slate-200 text-center">
                     <div
-                        class="w-16 h-16 bg-gray-100 text-gray-600 rounded-2xl flex items-center justify-center mx-auto mb-6">
+                        class="w-16 h-16 bg-slate-100 text-slate-600 rounded-2xl flex items-center justify-center mx-auto mb-6">
                         <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none"
                             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <rect width="18" height="11" x="3" y="11" rx="2" ry="2" />
                             <path d="M7 11V7a5 5 0 0 1 10 0v4" />
                         </svg>
                     </div>
-                    <h2 class="text-3xl font-heading font-extrabold text-gray-900 mb-2">Admin Portal</h2>
-                    <p class="text-gray-500 mb-8">Secure access required.</p>
+                    <h2 class="text-2xl font-bold text-slate-900 mb-2">Admin Access</h2>
+                    <p class="text-slate-500 mb-6 text-sm">Enter the master password to continue.</p>
                     <div class="space-y-4">
-                        <input id="adminPass" type="password" placeholder="Master Password"
-                            class="w-full px-5 py-4 rounded-xl border border-gray-200 bg-gray-50 focus:bg-white focus:ring-2 focus:ring-gray-900 outline-none transition-all font-medium text-center" />
+                        <input id="adminPass" type="password" placeholder="Password"
+                            class="w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all" />
                         <button onclick="adminLogin()"
-                            class="w-full bg-gray-900 hover:bg-black text-white font-bold py-4 rounded-xl transition-colors shadow-md">
+                            class="w-full bg-slate-900 hover:bg-slate-800 text-white font-semibold py-3 rounded-xl transition-colors">
                             Enter Dashboard
                         </button>
                     </div>
@@ -597,119 +223,101 @@
             </div>
 
             <!-- Admin Panel -->
-            <div id="adminPanel" class="hidden pt-8">
-                <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-10 gap-4">
+            <div id="adminPanel" class="hidden">
+                <div class="flex items-center justify-between mb-8">
                     <div>
-                        <h2 class="text-4xl font-heading font-extrabold text-gray-900">Dashboard</h2>
-                        <p class="text-gray-500 mt-2 text-lg">Manage inventory and track orders.</p>
+                        <h2 class="text-3xl font-bold text-slate-900 tracking-tight">Dashboard</h2>
+                        <p class="text-slate-500 mt-1">Manage your inventory and track orders.</p>
                     </div>
-                    <button onclick="location.reload()"
-                        class="px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg font-semibold text-sm transition-colors">Logout</button>
                 </div>
 
                 <div class="grid lg:grid-cols-12 gap-8">
                     <!-- Left Column: Forms -->
-                    <div class="lg:col-span-4 space-y-8">
+                    <div class="lg:col-span-4 space-y-6">
                         <!-- Add Product -->
-                        <div
-                            class="bg-white p-8 rounded-[2rem] shadow-sm border border-gray-200 relative overflow-hidden">
-                            <div class="absolute top-0 right-0 w-16 h-16 bg-amber-50 rounded-bl-[50px] -z-0"></div>
-                            <div class="relative z-10">
-                                <div class="flex items-center gap-3 mb-6">
-                                    <div class="p-2 bg-amber-100 text-amber-600 rounded-lg"><svg
-                                            xmlns="http://www.w3.org/2000/svg" width="20" height="20"
-                                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                            stroke-linecap="round" stroke-linejoin="round">
-                                            <path d="m7.5 4.27 9 5.15" />
-                                            <path
-                                                d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z" />
-                                            <path d="m3.3 7 8.7 5 8.7-5" />
-                                            <path d="M12 22V12" />
-                                        </svg></div>
-                                    <h3 class="font-heading font-bold text-xl text-gray-900">Add Product</h3>
-                                </div>
-                                <div class="space-y-4">
-                                    <input id="pname" placeholder="Product Name"
-                                        class="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50 focus:bg-white focus:ring-2 focus:ring-amber-500 outline-none" />
-                                    <input id="pprice" type="number" placeholder="Price (KSh)"
-                                        class="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50 focus:bg-white focus:ring-2 focus:ring-amber-500 outline-none" />
-                                    <textarea id="pdesc" placeholder="Description" rows="3"
-                                        class="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50 focus:bg-white focus:ring-2 focus:ring-amber-500 outline-none resize-none"></textarea>
-                                    <button onclick="addProduct()"
-                                        class="w-full bg-amber-500 hover:bg-amber-600 text-white font-bold py-3.5 rounded-xl transition-colors flex justify-center items-center gap-2">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18"
-                                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
-                                            stroke-linecap="round" stroke-linejoin="round">
-                                            <path d="M5 12h14" />
-                                            <path d="M12 5v14" />
-                                        </svg>
-                                        Add Product
-                                    </button>
-                                </div>
+                        <div class="bg-white p-6 rounded-3xl shadow-sm border border-slate-200">
+                            <div class="flex items-center gap-2 mb-4">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" class="text-amber-500"
+                                    viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                    stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="m7.5 4.27 9 5.15" />
+                                    <path
+                                        d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z" />
+                                    <path d="m3.3 7 8.7 5 8.7-5" />
+                                    <path d="M12 22V12" />
+                                </svg>
+                                <h3 class="font-bold text-lg text-slate-900">Add Product</h3>
+                            </div>
+                            <div class="space-y-3">
+                                <input id="pname" placeholder="Product Name"
+                                    class="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-sm focus:ring-2 focus:ring-blue-500 outline-none" />
+                                <input id="pprice" type="number" placeholder="Price (KSh)"
+                                    class="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-sm focus:ring-2 focus:ring-blue-500 outline-none" />
+                                <textarea id="pdesc" placeholder="Description" rows="2"
+                                    class="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-sm focus:ring-2 focus:ring-blue-500 outline-none resize-none"></textarea>
+                                <button onclick="addProduct()"
+                                    class="w-full bg-amber-500 hover:bg-amber-600 text-white font-medium py-2.5 rounded-xl transition-colors flex justify-center items-center gap-2">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+                                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                        stroke-linejoin="round">
+                                        <path d="M5 12h14" />
+                                        <path d="M12 5v14" />
+                                    </svg>
+                                    Add Product
+                                </button>
                             </div>
                         </div>
 
                         <!-- Add Service -->
-                        <div
-                            class="bg-white p-8 rounded-[2rem] shadow-sm border border-gray-200 relative overflow-hidden">
-                            <div class="absolute top-0 right-0 w-16 h-16 bg-blue-50 rounded-bl-[50px] -z-0"></div>
-                            <div class="relative z-10">
-                                <div class="flex items-center gap-3 mb-6">
-                                    <div class="p-2 bg-blue-100 text-blue-600 rounded-lg"><svg
-                                            xmlns="http://www.w3.org/2000/svg" width="20" height="20"
-                                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                            stroke-linecap="round" stroke-linejoin="round">
-                                            <path
-                                                d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z" />
-                                        </svg></div>
-                                    <h3 class="font-heading font-bold text-xl text-gray-900">Add Service</h3>
-                                </div>
-                                <div class="space-y-4">
-                                    <input id="sname" placeholder="Service Name"
-                                        class="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50 focus:bg-white focus:ring-2 focus:ring-blue-500 outline-none" />
-                                    <input id="sprice" type="number" placeholder="Price (KSh)"
-                                        class="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50 focus:bg-white focus:ring-2 focus:ring-blue-500 outline-none" />
-                                    <textarea id="sdesc" placeholder="Description" rows="3"
-                                        class="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50 focus:bg-white focus:ring-2 focus:ring-blue-500 outline-none resize-none"></textarea>
-                                    <button onclick="addService()"
-                                        class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3.5 rounded-xl transition-colors flex justify-center items-center gap-2">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18"
-                                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
-                                            stroke-linecap="round" stroke-linejoin="round">
-                                            <path d="M5 12h14" />
-                                            <path d="M12 5v14" />
-                                        </svg>
-                                        Add Service
-                                    </button>
-                                </div>
+                        <div class="bg-white p-6 rounded-3xl shadow-sm border border-slate-200">
+                            <div class="flex items-center gap-2 mb-4">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" class="text-blue-500"
+                                    viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                    stroke-linecap="round" stroke-linejoin="round">
+                                    <path
+                                        d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z" />
+                                </svg>
+                                <h3 class="font-bold text-lg text-slate-900">Add Service</h3>
+                            </div>
+                            <div class="space-y-3">
+                                <input id="sname" placeholder="Service Name"
+                                    class="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-sm focus:ring-2 focus:ring-blue-500 outline-none" />
+                                <input id="sprice" type="number" placeholder="Price (KSh)"
+                                    class="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-sm focus:ring-2 focus:ring-blue-500 outline-none" />
+                                <textarea id="sdesc" placeholder="Description" rows="2"
+                                    class="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-sm focus:ring-2 focus:ring-blue-500 outline-none resize-none"></textarea>
+                                <button onclick="addService()"
+                                    class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2.5 rounded-xl transition-colors flex justify-center items-center gap-2">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+                                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                        stroke-linejoin="round">
+                                        <path d="M5 12h14" />
+                                        <path d="M12 5v14" />
+                                    </svg>
+                                    Add Service
+                                </button>
                             </div>
                         </div>
                     </div>
 
                     <!-- Right Column: Orders -->
                     <div class="lg:col-span-8">
-                        <div class="bg-white p-8 rounded-[2rem] shadow-sm border border-gray-200 h-full">
-                            <div class="flex items-center justify-between mb-8 pb-4 border-b border-gray-100">
-                                <div class="flex items-center gap-3">
-                                    <div class="p-2 bg-gray-100 text-gray-600 rounded-lg"><svg
-                                            xmlns="http://www.w3.org/2000/svg" width="20" height="20"
-                                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                            stroke-linecap="round" stroke-linejoin="round">
-                                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
-                                            <polyline points="14 2 14 8 20 8" />
-                                            <line x1="16" x2="8" y1="13" y2="13" />
-                                            <line x1="16" x2="8" y1="17" y2="17" />
-                                            <polyline points="10 9 9 9 8 9" />
-                                        </svg></div>
-                                    <h3 class="font-heading font-bold text-2xl text-gray-900">Recent Orders</h3>
-                                </div>
-                                <button onclick="loadOrders()"
-                                    class="text-sm font-semibold text-brand-600 hover:text-brand-700">Refresh</button>
+                        <div class="bg-white p-6 rounded-3xl shadow-sm border border-slate-200 h-full">
+                            <div class="flex items-center gap-2 mb-6 pb-4 border-b border-slate-100">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" class="text-slate-400"
+                                    viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                    stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                                    <polyline points="14 2 14 8 20 8" />
+                                    <line x1="16" x2="8" y1="13" y2="13" />
+                                    <line x1="16" x2="8" y1="17" y2="17" />
+                                    <polyline points="10 9 9 9 8 9" />
+                                </svg>
+                                <h3 class="font-bold text-xl text-slate-900">Recent Orders</h3>
                             </div>
-                            <div id="orders" class="space-y-6">
-                                <div class="py-12 flex justify-center">
-                                    <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-600"></div>
-                                </div>
+                            <div id="orders" class="space-y-4 font-mono text-sm">
+                                <!-- Orders injected via JS -->
+                                <p class="text-slate-400 text-center py-8 font-sans">Loading orders...</p>
                             </div>
                         </div>
                     </div>
@@ -717,134 +325,100 @@
             </div>
         </section>
 
-        <!-- ORDER DIALOG -->
-        <dialog id="orderDialog"
-            class="p-0 rounded-[2rem] border border-gray-200 shadow-2xl w-[90%] max-w-lg bg-white overflow-hidden">
-            <div class="p-8">
-                <div class="flex justify-between items-center mb-6">
-                    <h2 class="text-2xl font-heading font-extrabold text-gray-900">Delivery Details</h2>
-                    <button onclick="document.getElementById('orderDialog').close()"
-                        class="text-gray-400 hover:text-gray-900">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <line x1="18" y1="6" x2="6" y2="18"></line>
-                            <line x1="6" y1="6" x2="18" y2="18"></line>
-                        </svg>
-                    </button>
-                </div>
-                <div class="space-y-4">
-                    <div>
-                        <label class="block text-sm font-bold text-gray-700 mb-1.5">Full Name</label>
-                        <input type="text" id="custName" placeholder="John Doe"
-                            class="w-full p-4 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-brand-500 focus:bg-white outline-none transition-all">
-                    </div>
-                    <div>
-                        <label class="block text-sm font-bold text-gray-700 mb-1.5">Delivery Address / Location</label>
-                        <input type="text" id="custLocation" placeholder="123 Main St, Apt 4B"
-                            class="w-full p-4 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-brand-500 focus:bg-white outline-none transition-all">
-                    </div>
-                    <div>
-                        <label class="block text-sm font-bold text-gray-700 mb-1.5">Phone Number</label>
-                        <input type="tel" id="custPhone" placeholder="+254 700 000000"
-                            class="w-full p-4 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-brand-500 focus:bg-white outline-none transition-all">
-                    </div>
-                    <div>
-                        <label class="block text-sm font-bold text-gray-700 mb-1.5">Email Address</label>
-                        <input type="email" id="custEmail" placeholder="john@example.com"
-                            class="w-full p-4 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-brand-500 focus:bg-white outline-none transition-all">
+        <!-- AUTH SECTION -->
+        <section id="auth" class="page-section hidden">
+            <div class="max-w-md mx-auto mt-10">
+                <div class="bg-white p-8 rounded-3xl shadow-sm border border-slate-200">
+                    <div class="text-center mb-8">
+                        <div
+                            class="w-16 h-16 bg-blue-50 text-blue-600 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round">
+                                <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
+                                <circle cx="12" cy="7" r="4" />
+                            </svg>
+                        </div>
+                        <h2 class="text-2xl font-bold text-slate-900">Your Account</h2>
+                        <p class="text-slate-500 mt-1 text-sm">Sign in or create a new account to place orders.</p>
                     </div>
 
-                    <div class="flex gap-3 pt-4">
-                        <button onclick="document.getElementById('orderDialog').close()"
-                            class="flex-1 p-4 bg-gray-100 hover:bg-gray-200 text-gray-900 rounded-xl font-bold transition-colors">Cancel</button>
-                        <button onclick="confirmOrder()"
-                            class="flex-1 p-4 bg-brand-600 hover:bg-brand-700 text-white rounded-xl font-bold transition-colors shadow-lg shadow-brand-500/30">Confirm
-                            Order</button>
+                    <div class="space-y-4">
+                        <div>
+                            <label
+                                class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">Email
+                                Address</label>
+                            <input id="email" type="email" placeholder="you@example.com"
+                                class="w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-blue-500 outline-none transition-all" />
+                        </div>
+                        <div>
+                            <label
+                                class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">Password</label>
+                            <input id="password" type="password" placeholder="••••••••"
+                                class="w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-blue-500 outline-none transition-all" />
+                        </div>
+
+                        <div class="pt-4 grid grid-cols-2 gap-3">
+                            <button onclick="signIn()"
+                                class="w-full bg-slate-900 hover:bg-slate-800 text-white font-medium py-3 rounded-xl transition-colors">
+                                Login
+                            </button>
+                            <button onclick="signUp()"
+                                class="w-full bg-white hover:bg-slate-50 text-slate-900 border border-slate-200 font-medium py-3 rounded-xl transition-colors">
+                                Sign Up
+                            </button>
+                        </div>
+
+                        <div id="authMsgContainer"
+                            class="hidden mt-4 p-3 rounded-xl bg-slate-100 text-center text-sm font-medium">
+                            <p id="authMsg" class="text-slate-700"></p>
+                        </div>
                     </div>
+                </div>
+            </div>
+
+        </section>
+        <dialog id="orderDialog" class="p-6 rounded-2xl border-none shadow-2xl backdrop:blur-sm w-90">
+            <div class="flex flex-col gap-4">
+                <h2 class="text-xl font-bold text-slate-900">Delivery Details</h2>
+                <input type="text" id="custName" placeholder="Full Name" class="p-3 border rounded-xl">
+                <input type="text" id="custLocation" placeholder="Location/Address" class="p-3 border rounded-xl">
+                <input type="tel" id="custPhone" placeholder="Phone Number" class="p-3 border rounded-xl">
+                <input type="email" id="custEmail" placeholder="Gmail Address" class="p-3 border rounded-xl">
+                <div class="flex gap-2 mt-2">
+                    <button onclick="document.getElementById('orderDialog').close()"
+                        class="flex-1 p-3 bg-slate-100 rounded-xl font-bold">Cancel</button>
+                    <button onclick="confirmOrder()"
+                        class="flex-1 p-3 bg-blue-600 text-white rounded-xl font-bold">Place Order</button>
                 </div>
             </div>
         </dialog>
     </main>
 
-    <!-- FOOTER -->
-    <footer class="bg-white border-t border-gray-200 mt-auto">
-        <div
-            class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex flex-col md:flex-row items-center justify-between gap-4">
-            <div class="flex items-center gap-2">
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" class="text-brand-600"
-                    viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
-                    stroke-linejoin="round">
-                    <rect width="20" height="14" x="2" y="3" rx="2" />
-                    <line x1="8" x2="16" y1="21" y2="21" />
-                    <line x1="12" x2="12" y1="17" y2="21" />
-                </svg>
-                <span class="font-heading font-extrabold text-gray-900">NTK<span
-                        class="text-brand-600">Services</span></span>
-            </div>
-            <p class="text-gray-500 text-sm font-medium">&copy; 2026 NTK Services. All rights reserved.</p>
-        </div>
-    </footer>
-
     <!-- UI & ROUTING SCRIPT -->
     <script>
-        // Side Navigation Toggle Function
-        function toggleSideNav() {
-            const sideNav = document.getElementById('sideNav');
-            const overlay = document.getElementById('navOverlay');
-            const hamburgerIcon = document.getElementById('hamburgerIcon');
-
-            if (sideNav.classList.contains('-translate-x-full')) {
-                // Open side nav
-                sideNav.classList.remove('-translate-x-full');
-                overlay.classList.remove('opacity-0', 'pointer-events-none');
-                hamburgerIcon.style.transform = 'rotate(90deg)';
-            } else {
-                // Close side nav
-                sideNav.classList.add('-translate-x-full');
-                overlay.classList.add('opacity-0', 'pointer-events-none');
-                hamburgerIcon.style.transform = 'rotate(0deg)';
-            }
-        }
-
-        // Close side nav when pressing Escape key
-        document.addEventListener('keydown', function (e) {
-            if (e.key === 'Escape') {
-                const sideNav = document.getElementById('sideNav');
-                if (!sideNav.classList.contains('-translate-x-full')) {
-                    toggleSideNav();
-                }
-            }
-        });
-
         function showPage(id) {
             // Hide all sections
             document.querySelectorAll('.page-section').forEach(s => {
-                s.classList.remove('active');
+                s.classList.add('hidden');
+                s.classList.remove('animate-fade-in');
             });
 
-            // Show target section
+            // Show target section with a small fade effect (using tailwind utility if defined, or just block)
             const target = document.getElementById(id);
-            if (target) {
-                target.classList.add('active');
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-            }
+            target.classList.remove('hidden');
 
-            // Update Nav Active States (for side nav buttons)
-            document.querySelectorAll('.side-nav-btn').forEach(btn => {
+            // Update Nav Active States
+            document.querySelectorAll('.nav-btn').forEach(btn => {
                 if (btn.dataset.target === id) {
-                    btn.classList.add('bg-brand-50', 'text-brand-700', 'border', 'border-brand-200');
-                    btn.classList.remove('text-gray-500');
+                    btn.classList.add('bg-white', 'shadow-sm', 'text-slate-900');
+                    btn.classList.remove('text-slate-600');
                 } else {
-                    btn.classList.remove('bg-brand-50', 'text-brand-700', 'border', 'border-brand-200');
-                    btn.classList.add('text-gray-500');
+                    btn.classList.remove('bg-white', 'shadow-sm', 'text-slate-900');
+                    btn.classList.add('text-slate-600');
                 }
             });
         }
-
-        // Initialize - Set Home as active on page load
-        document.addEventListener('DOMContentLoaded', function () {
-            showPage('home');
-        });
 
         function adminLogin() {
             const pass = document.getElementById('adminPass').value;
@@ -861,9 +435,9 @@
         showPage('home');
     </script>
 
-    <!-- SUPABASE & DATA SCRIPT -->
+    <!-- SUPABASE SCRIPT -->
     <script>
-        // Note: Using provided keys
+        // Note: Replace these with actual keys for production.
         const SUPABASE_URL = "https://phypulwiydnjrjebfjpm.supabase.co";
         const SUPABASE_ANON = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBoeXB1bHdpeWRuanJqZWJmanBtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzExNTEwOTEsImV4cCI6MjA4NjcyNzA5MX0.KByt2pb-S0J3myYtLWN6q2JH24nJxA3af3GngVQXBcs";
         const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
@@ -871,14 +445,14 @@
         function showMessage(msg, isError = false) {
             const container = document.getElementById('authMsgContainer');
             const text = document.getElementById('authMsg');
-            container.classList.remove('hidden', 'border-red-200', 'bg-red-50', 'border-green-200', 'bg-green-50');
+            container.classList.remove('hidden', 'bg-red-50', 'bg-green-50');
             text.classList.remove('text-red-600', 'text-green-600');
 
             if (isError) {
-                container.classList.add('border-red-200', 'bg-red-50');
+                container.classList.add('bg-red-50');
                 text.classList.add('text-red-600');
             } else {
-                container.classList.add('border-green-200', 'bg-green-50');
+                container.classList.add('bg-green-50');
                 text.classList.add('text-green-600');
             }
             text.innerText = msg;
@@ -890,49 +464,28 @@
         function addToCart(id, name, price, type) {
             cart.push({ id, name, price, type });
             updateCartUI();
-
-            // Temporary toast effect on button
-            const btn = event.currentTarget;
-            const originalText = btn.innerText;
-            btn.innerText = "Added!";
-            btn.classList.add('bg-green-500', 'text-white');
-            btn.classList.remove('bg-gray-900', 'hover:bg-brand-600');
-            setTimeout(() => {
-                btn.innerText = originalText;
-                btn.classList.remove('bg-green-500', 'text-white');
-                btn.classList.add('bg-gray-900', 'hover:bg-brand-600');
-            }, 1000);
+            showMessage(`${name} added to cart!`);
         }
 
         function updateCartUI() {
             const cartBtn = document.getElementById('cartBtn');
-            const cartCountSide = document.getElementById('cartCountSide');
             if (cartBtn) {
-                let indicator = cart.length > 0 ? `<span class="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-brand-600 text-[10px] font-bold text-white">${cart.length}</span>` : '';
-                cartBtn.innerHTML = `
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg> 
-                    <span>Cart</span>
-                    ${indicator}
-                `;
-            }
-            // Update side nav cart count
-            if (cartCountSide) {
-                cartCountSide.textContent = cart.length;
+                cartBtn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg> <span class="hidden sm:inline">Cart (${cart.length})</span>`;
             }
         }
 
         function showCart() {
             if (cart.length === 0) {
-                alert("Your cart is empty. Please add items from the Shop.");
+                alert("Cart is empty! Add some items first.");
                 return;
             }
-            let cartMsg = "YOUR CART:\n\n";
+            let cartMsg = "Your Cart:\n\n";
             let total = 0;
             cart.forEach((item, index) => {
-                cartMsg += `${index + 1}. ${item.name}\n   KSh ${item.price.toLocaleString()}\n`;
+                cartMsg += `${index + 1}. ${item.name} - KSh ${item.price}\n`;
                 total += item.price;
             });
-            cartMsg += `\nTOTAL: KSh ${total.toLocaleString()}\n\nProceed to checkout?`;
+            cartMsg += `\nTotal: KSh ${total}\n\nClick OK to checkout!`;
 
             if (confirm(cartMsg)) {
                 placeOrder();
@@ -949,49 +502,36 @@
             if (error) return showMessage(error.message, true);
 
             if (data.user) {
+                // FORCE SYNC: Manually insert the email into profiles immediately
                 await sb.from('profiles').upsert({
                     id: data.user.id,
-                    email: email,
+                    email: email, // This is the key part you were missing!
                     full_name: email.split('@')[0]
                 });
             }
 
-            showMessage("Account created successfully!");
-            setTimeout(() => showPage('shop'), 1500);
+            showMessage("Account created! Check email if confirmation is on.");
         }
 
+        // Open the dialog instead of just ordering
+        // Replacement for your "Place Order" button logic
         async function placeOrder() {
-            if (cart.length === 0) return alert("Cart is empty!");
-
-            // Pre-fill email if logged in
-            const { data: { user } } = await sb.auth.getUser();
-            if (user) {
-                document.getElementById('custEmail').value = user.email;
-            }
-
+            if (cart.length === 0) return showMessage("Cart is empty!", true);
             document.getElementById('orderDialog').showModal();
         }
 
         async function confirmOrder() {
-            const { data: { user } } = await sb.auth.getUser();
-            if (!user) {
-                document.getElementById('orderDialog').close();
-                showPage('auth');
-                showMessage("Please login or create an account to place an order.", true);
-                return;
-            }
+            const user = (await sb.auth.getUser()).data.user;
+            if (!user) return showMessage("Please login first", true);
 
             const name = document.getElementById('custName').value;
             const loc = document.getElementById('custLocation').value;
             const phone = document.getElementById('custPhone').value;
             const email = document.getElementById('custEmail').value;
 
-            if (!name || !loc || !phone || !email) return alert("Please fill all delivery details.");
+            if (!name || !loc || !phone || !email) return alert("Fill all fields!");
 
-            const btn = event.currentTarget;
-            btn.innerText = "Processing...";
-            btn.disabled = true;
-
+            // 1. Create Order with the new data
             const { data: order, error: orderErr } = await sb.from('orders').insert({
                 user_id: user.id,
                 customer_name: name,
@@ -1001,11 +541,9 @@
                 status: 'pending'
             }).select().single();
 
-            if (orderErr) {
-                btn.innerText = "Confirm Order"; btn.disabled = false;
-                return alert(orderErr.message);
-            }
+            if (orderErr) return showMessage(orderErr.message, true);
 
+            // 2. Add items to order_items
             const orderItems = cart.map(item => ({
                 order_id: order.id,
                 product_id: item.type === 'product' ? item.id : null,
@@ -1014,29 +552,16 @@
             }));
 
             const { error: itemsErr } = await sb.from('order_items').insert(orderItems);
-            if (itemsErr) {
-                btn.innerText = "Confirm Order"; btn.disabled = false;
-                return alert(itemsErr.message);
-            }
+            if (itemsErr) return showMessage(itemsErr.message, true);
 
             cart = [];
             updateCartUI();
             document.getElementById('orderDialog').close();
-
-            // Reset form
-            document.getElementById('custName').value = '';
-            document.getElementById('custLocation').value = '';
-            document.getElementById('custPhone').value = '';
-
-            btn.innerText = "Confirm Order"; btn.disabled = false;
-
-            alert("Order placed successfully! We will contact you shortly.");
-            showPage('home');
+            showMessage("Order placed successfully! Epsilon team is on it.");
         }
 
         async function loadOrders() {
             const ordersDiv = document.getElementById('orders');
-            ordersDiv.innerHTML = '<div class="py-12 flex justify-center"><div class="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-600"></div></div>';
 
             const { data: orders, error: orderError } = await sb
                 .from('orders')
@@ -1044,57 +569,43 @@
                 .order('id', { ascending: false });
 
             if (orderError) {
-                ordersDiv.innerHTML = `<p class="text-red-500 font-bold p-4 bg-red-50 rounded-xl">Failed to load orders.</p>`;
+                ordersDiv.innerHTML = `<p class="text-red-500">Failed to load orders.</p>`;
                 return;
             }
 
             ordersDiv.innerHTML = '';
-            if (orders.length === 0) {
-                ordersDiv.innerHTML = `<p class="text-gray-500 text-center py-8">No orders found.</p>`;
-                return;
-            }
-
             orders.forEach(o => {
                 let itemsHtml = '';
                 let total = 0;
                 o.order_items.forEach(i => {
                     const itemName = i.products?.name || i.services?.name || 'Unknown Item';
-                    itemsHtml += `
-                        <div class="flex justify-between py-2 border-b border-gray-100 last:border-0">
-                            <span class="text-gray-600 text-sm font-medium">${itemName}</span>
-                            <span class="font-bold text-sm text-gray-900">KSh ${Number(i.price).toLocaleString()}</span>
-                        </div>`;
+                    itemsHtml += `<div class="flex justify-between py-1 border-b border-slate-100/50 last:border-0"><span class="text-slate-600 text-sm">${itemName}</span><span class="font-medium text-sm">KSh ${i.price}</span></div>`;
                     total += Number(i.price);
                 });
 
                 ordersDiv.innerHTML += `
-                <div class='bg-white p-6 rounded-2xl border border-gray-200 shadow-sm hover:shadow-md transition-shadow'>
-                    <div class="flex flex-wrap justify-between items-start mb-5 gap-4">
-                        <div>
-                            <div class="flex items-center gap-2 mb-1">
-                                <h3 class="font-heading font-extrabold text-lg text-gray-900">Order #${o.id}</h3>
-                                <span class="text-[10px] bg-amber-100 text-amber-700 px-2.5 py-1 rounded-full font-bold uppercase tracking-wider">${o.status}</span>
-                            </div>
-                            <p class="text-gray-500 text-sm">${new Date(o.created_at || Date.now()).toLocaleDateString()}</p>
-                        </div>
-                        <div class="text-right">
-                            <p class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-1">Total</p>
-                            <p class="font-heading font-extrabold text-xl text-brand-600">KSh ${total.toLocaleString()}</p>
-                        </div>
-                    </div>
-                    
-                    <div class="bg-gray-50 p-4 rounded-xl mb-5 text-sm space-y-2 border border-gray-100">
-                        <div class="flex items-start gap-3"><span class="text-gray-400">👤</span> <span class="font-bold text-gray-800">${o.customer_name}</span></div>
-                        <div class="flex items-start gap-3"><span class="text-gray-400">📍</span> <span class="font-bold text-gray-800">${o.customer_location}</span></div>
-                        <div class="flex items-start gap-3"><span class="text-gray-400">📞</span> <span class="font-bold text-gray-800">${o.customer_phone}</span></div>
-                        <div class="flex items-start gap-3"><span class="text-gray-400">✉️</span> <span class="font-bold text-gray-800">${o.customer_email}</span></div>
-                    </div>
+          <div class='bg-white p-5 rounded-2xl border border-slate-200 shadow-sm'>
+            <div class="flex justify-between items-start mb-4">
+                <div>
+                    <h3 class="font-extrabold text-slate-900">Order #${o.id}</h3>
+                    <p class="text-blue-600 font-bold text-sm">${o.customer_email}</p>
+                </div>
+                <span class="text-[10px] bg-green-100 text-green-700 px-2 py-1 rounded-full font-bold uppercase">${o.status}</span>
+            </div>
+            
+            <div class="bg-slate-50 p-3 rounded-xl mb-4 text-xs space-y-1 border border-slate-100">
+                <p>👤 <span class="font-semibold text-slate-700">${o.customer_name}</span></p>
+                <p>📍 <span class="font-semibold text-slate-700">${o.customer_location}</span></p>
+                <p>📞 <span class="font-semibold text-slate-700">${o.customer_phone}</span></p>
+            </div>
 
-                    <div class="bg-white border border-gray-100 rounded-xl p-4">
-                        <h4 class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-3 pb-2 border-b border-gray-100">Order Items</h4>
-                        ${itemsHtml}
-                    </div>
-                </div>`;
+            <div class="mb-4">${itemsHtml}</div>
+            
+            <div class="flex justify-between items-center pt-3 border-t-2 border-dashed border-slate-100">
+              <span class="text-slate-400 uppercase text-[10px] font-black tracking-widest">Total</span>
+              <span class="font-black text-lg text-slate-900">KSh ${total}</span>
+            </div>
+          </div>`;
             });
         }
 
@@ -1120,9 +631,6 @@
 
             if (!name || !price) return alert("Name and price required.");
 
-            const btn = event.currentTarget;
-            btn.innerText = "Adding...";
-
             await sb.from('products').insert({ name, price, description });
 
             document.getElementById('pname').value = '';
@@ -1130,7 +638,6 @@
             document.getElementById('pdesc').value = '';
 
             loadProducts();
-            btn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14" /><path d="M12 5v14" /></svg> Add Product`;
             alert("Product added!");
         }
 
@@ -1141,9 +648,6 @@
 
             if (!name || !price) return alert("Name and price required.");
 
-            const btn = event.currentTarget;
-            btn.innerText = "Adding...";
-
             await sb.from('services').insert({ name, price, description });
 
             document.getElementById('sname').value = '';
@@ -1151,7 +655,6 @@
             document.getElementById('sdesc').value = '';
 
             loadServices();
-            btn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14" /><path d="M12 5v14" /></svg> Add Service`;
             alert("Service added!");
         }
 
@@ -1160,40 +663,31 @@
             const productList = document.getElementById('productList');
 
             if (error || !data) {
-                productList.innerHTML = `<div class="col-span-full p-6 bg-red-50 text-red-600 rounded-2xl text-center font-bold">Unable to load products.</div>`;
+                productList.innerHTML = `<p class="text-slate-500 col-span-full">Unable to load products. Check database connection.</p>`;
                 return;
             }
 
             if (data.length === 0) {
-                productList.innerHTML = `<div class="col-span-full p-10 border-2 border-dashed border-gray-200 rounded-3xl text-center text-gray-500 font-medium">No products available yet.</div>`;
+                productList.innerHTML = `<p class="text-slate-500 col-span-full">No products available yet.</p>`;
                 return;
             }
 
             productList.innerHTML = '';
-            data.forEach((p, index) => {
-                // Use different placeholder images based on index for variety
-                const images = [
-                    "https://images.unsplash.com/photo-1550009158-9effb6628340?auto=format&fit=crop&w=600&q=80",
-                    "https://images.unsplash.com/photo-1592833159155-c62df1b65634?auto=format&fit=crop&w=600&q=80",
-                    "https://images.unsplash.com/photo-1544244015-0df4b3ffc6b0?auto=format&fit=crop&w=600&q=80"
-                ];
-                const imgSrc = images[index % images.length];
-
+            data.forEach(p => {
                 const div = document.createElement('div');
-                div.className = 'group flex flex-col bg-white rounded-[2rem] overflow-hidden border border-gray-100 shadow-sm hover:shadow-2xl transition-all duration-300 hover:-translate-y-1';
+                div.className = 'bg-white p-6 rounded-3xl border border-slate-100 shadow-sm hover:shadow-md transition-shadow flex flex-col h-full';
                 div.innerHTML = `
-                    <div class="h-48 w-full overflow-hidden bg-gray-100 relative">
-                        <img src="${imgSrc}" alt="${p.name}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
-                        <div class="absolute top-4 right-4 bg-white/90 backdrop-blur px-3 py-1.5 rounded-full text-xs font-bold text-gray-900 shadow-sm">Product</div>
-                    </div>
-                    <div class="p-6 sm:p-8 flex flex-col flex-grow">
-                        <h3 class='text-xl font-heading font-extrabold text-gray-900 mb-2'>${p.name}</h3>
-                        <p class='text-gray-500 text-sm leading-relaxed mb-6 flex-grow'>${p.description || 'Premium quality equipment for your setup needs.'}</p>
-                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pt-4 border-t border-gray-100">
-                            <span class='text-2xl font-heading font-extrabold text-brand-600'>KSh ${Number(p.price).toLocaleString()}</span>
-                            <button class='bg-gray-900 hover:bg-brand-600 text-white px-5 py-3 rounded-xl font-bold text-sm transition-colors w-full sm:w-auto text-center shadow-md' onclick="addToCart(${p.id},'${p.name.replace(/'/g, "\\'")}',${p.price},'product')">Add to Cart</button>
-                        </div>
-                    </div>`;
+          <div class="flex-1">
+            <div class="w-12 h-12 bg-amber-50 text-amber-500 rounded-2xl flex items-center justify-center mb-4">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m7.5 4.27 9 5.15"/><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/><path d="m3.3 7 8.7 5 8.7-5"/><path d="M12 22V12"/></svg>
+            </div>
+            <h3 class='text-lg font-bold text-slate-900'>${p.name}</h3>
+            <p class='text-slate-500 mt-2 text-sm leading-relaxed'>${p.description || 'Premium quality product.'}</p>
+          </div>
+          <div class="mt-6 flex items-center justify-between pt-4 border-t border-slate-50">
+            <span class='text-xl font-extrabold text-slate-900'>KSh ${p.price}</span>
+            <button class='bg-slate-900 hover:bg-slate-800 text-white px-4 py-2 rounded-xl font-medium text-sm transition-colors' onclick="addToCart(${p.id},'${p.name.replace(/'/g, "\\'")}',${p.price},'product')">Add to Cart</button>
+          </div>`;
                 productList.appendChild(div);
             });
         }
@@ -1203,151 +697,58 @@
             const serviceList = document.getElementById('serviceList');
 
             if (error || !data) {
-                serviceList.innerHTML = `<div class="col-span-full p-6 bg-red-50 text-red-600 rounded-2xl text-center font-bold">Unable to load services.</div>`;
+                serviceList.innerHTML = `<p class="text-slate-500 col-span-full">Unable to load services. Check database connection.</p>`;
                 return;
             }
 
             if (data.length === 0) {
-                serviceList.innerHTML = `<div class="col-span-full p-10 border-2 border-dashed border-gray-200 rounded-3xl text-center text-gray-500 font-medium">No services available yet.</div>`;
+                serviceList.innerHTML = `<p class="text-slate-500 col-span-full">No services available yet.</p>`;
                 return;
             }
 
             serviceList.innerHTML = '';
-            data.forEach((s, index) => {
-                const images = [
-                    "https://images.unsplash.com/photo-1581578731548-c64695cc6952?auto=format&fit=crop&w=600&q=80",
-                    "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=600&q=80",
-                    "https://images.unsplash.com/photo-1505691938895-1758d7feb511?auto=format&fit=crop&w=600&q=80"
-                ];
-                const imgSrc = images[index % images.length];
-
+            data.forEach(s => {
                 const div = document.createElement('div');
-                div.className = 'group flex flex-col bg-white rounded-[2rem] overflow-hidden border border-gray-100 shadow-sm hover:shadow-2xl transition-all duration-300 hover:-translate-y-1';
+                div.className = 'bg-white p-6 rounded-3xl border border-slate-100 shadow-sm hover:shadow-md transition-shadow flex flex-col h-full';
                 div.innerHTML = `
-                    <div class="h-48 w-full overflow-hidden bg-gray-100 relative">
-                        <img src="${imgSrc}" alt="${s.name}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
-                        <div class="absolute top-4 right-4 bg-white/90 backdrop-blur px-3 py-1.5 rounded-full text-xs font-bold text-gray-900 shadow-sm">Service</div>
-                    </div>
-                    <div class="p-6 sm:p-8 flex flex-col flex-grow">
-                        <h3 class='text-xl font-heading font-extrabold text-gray-900 mb-2'>${s.name}</h3>
-                        <p class='text-gray-500 text-sm leading-relaxed mb-6 flex-grow'>${s.description || 'Professional execution by our expert team.'}</p>
-                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pt-4 border-t border-gray-100">
-                            <span class='text-2xl font-heading font-extrabold text-brand-600'>KSh ${Number(s.price).toLocaleString()}</span>
-                            <button class='bg-gray-900 hover:bg-brand-600 text-white px-5 py-3 rounded-xl font-bold text-sm transition-colors w-full sm:w-auto text-center shadow-md' onclick="addToCart(${s.id},'${s.name.replace(/'/g, "\\'")}',${s.price},'service')">Add to Cart</button>
-                        </div>
-                    </div>`;
+          <div class="flex-1">
+            <div class="w-12 h-12 bg-blue-50 text-blue-600 rounded-2xl flex items-center justify-center mb-4">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+            </div>
+            <h3 class='text-lg font-bold text-slate-900'>${s.name}</h3>
+            <p class='text-slate-500 mt-2 text-sm leading-relaxed'>${s.description || 'Professional service by experts.'}</p>
+          </div>
+          <div class="mt-6 flex items-center justify-between pt-4 border-t border-slate-50">
+            <span class='text-xl font-extrabold text-slate-900'>KSh ${s.price}</span>
+            <button class='bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-xl font-medium text-sm transition-colors' onclick="addToCart(${s.id},'${s.name.replace(/'/g, "\\'")}',${s.price},'service')">Add to Cart</button>
+          </div>`;
                 serviceList.appendChild(div);
             });
         }
 
-        // Reviews functionality
-        let selectedRating = 0;
-
-        function setRating(rating) {
-            selectedRating = rating;
-            const stars = document.querySelectorAll('.star-btn');
-            stars.forEach((star, index) => {
-                if (index < rating) {
-                    star.classList.remove('text-gray-300');
-                    star.classList.add('text-amber-400');
-                } else {
-                    star.classList.remove('text-amber-400');
-                    star.classList.add('text-gray-300');
-                }
-            });
-        }
-
-        async function submitReview() {
-            const name = document.getElementById('reviewName').value;
-            const review = document.getElementById('reviewText').value;
-
-            if (!name || !selectedRating || !review) {
-                alert('Please fill in all fields and select a rating.');
-                return;
+        async function createOrder() {
+            const { data: { user } } = await sb.auth.getUser();
+            if (!user) {
+                alert('Please login to place an order.');
+                showPage('auth');
+                return null;
             }
-
-            const btn = event.currentTarget;
-            const originalText = btn.innerHTML;
-            btn.innerHTML = "Submitting...";
-            btn.disabled = true;
-
-            const { error } = await sb.from('reviews').insert({
-                name: name,
-                rating: selectedRating,
-                review: review,
-                created_at: new Date().toISOString()
-            });
+            const { data, error } = await sb.from('orders')
+                .insert({ user_id: user.id })
+                .select()
+                .single();
 
             if (error) {
-                alert('Failed to submit review: ' + error.message);
-                btn.innerHTML = originalText;
-                btn.disabled = false;
-            } else {
-                alert('Thank you for your review!');
-                document.getElementById('reviewName').value = '';
-                document.getElementById('reviewText').value = '';
-                selectedRating = 0;
-                setRating(0);
-                loadReviews();
-                btn.innerHTML = originalText;
-                btn.disabled = false;
+                console.error(error);
+                alert('Failed to create order.');
+                return null;
             }
-        }
-
-        async function loadReviews() {
-            const reviewsList = document.getElementById('reviewsList');
-
-            const { data, error } = await sb
-                .from('reviews')
-                .select('*')
-                .order('created_at', { ascending: false });
-
-            if (error || !data) {
-                reviewsList.innerHTML = `<div class="p-6 bg-red-50 text-red-600 rounded-2xl text-center font-bold">Unable to load reviews.</div>`;
-                return;
-            }
-
-            if (data.length === 0) {
-                reviewsList.innerHTML = `<div class="p-10 border-2 border-dashed border-gray-200 rounded-3xl text-center text-gray-500 font-medium">No reviews yet. Be the first to review!</div>`;
-                return;
-            }
-
-            reviewsList.innerHTML = '';
-            // Limit to top 6 for layout purposes if needed, but showing all for now
-            data.forEach(r => {
-                const starsHTML = Array(5).fill(0).map((_, i) =>
-                    `<span class="text-xl ${i < r.rating ? 'text-amber-400' : 'text-gray-200'}">★</span>`
-                ).join('');
-
-                const date = new Date(r.created_at).toLocaleDateString('en-US', {
-                    year: 'numeric', month: 'short', day: 'numeric'
-                });
-
-                const div = document.createElement('div');
-                div.className = 'bg-white p-6 sm:p-8 rounded-[2rem] border border-gray-100 shadow-sm hover:shadow-lg transition-shadow';
-                div.innerHTML = `
-                    <div class="flex flex-col sm:flex-row sm:items-center justify-between mb-4 gap-2">
-                        <div class="flex items-center gap-4">
-                            <div class="w-12 h-12 bg-gradient-to-br from-gray-100 to-gray-200 text-gray-600 rounded-full flex items-center justify-center font-heading font-extrabold text-lg shadow-inner">
-                                ${r.name.charAt(0).toUpperCase()}
-                            </div>
-                            <div>
-                                <h4 class="font-heading font-bold text-gray-900 text-lg">${r.name}</h4>
-                                <p class="text-xs font-medium text-gray-400 uppercase tracking-wider">${date}</p>
-                            </div>
-                        </div>
-                        <div class="flex">${starsHTML}</div>
-                    </div>
-                    <p class="text-gray-600 leading-relaxed italic">"${r.review}"</p>
-                `;
-                reviewsList.appendChild(div);
-            });
+            return data.id;
         }
 
         // Initial load
         loadProducts();
         loadServices();
-        loadReviews();
     </script>
 </body>
 
